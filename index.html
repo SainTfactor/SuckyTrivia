@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Sucky Trivia</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+      background-color: #3995a2;
+      border-color: #208493;
+    }
+    .navbar-brand {
+      padding: 10px 10px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#"><img src="http://saintfactorstudios.ml/SainTfactorStudiosIP/WingedTTransparent.png" alt="Winged T" height="32" width="32"></a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+    </div>
+  </div>
+</nav>
+  
+<div class="container-fluid text-center">    
+  <div class="row content">
+    <div class="col-sm-8 col-sm-offset-2 text-left"> 
+      <h1>Welcome to sucky trivia</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <hr>
+      <h3>Test</h3>
+      <p>Lorem ipsum...</p>
+    </div>
+  </div>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        var socket = io.connect('http://trivia.saintfactorstudios.ml/socket_space', {query: 'name=something'});
+
+        socket.on('some_event_from_server', function(data, cb) {
+        
+        });
+
+        $('#someButton').click(function() {
+            socket.emit('markers_add', {some: 'data'});  //send `markers_add` message to server within main namespace
+        });
+
+        $('#someOtherButton').click(function() {
+            socket.emit('icon_sets_add', {some: 'thing'}, function(response) {
+                //server may response to this request. see server side code below
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
