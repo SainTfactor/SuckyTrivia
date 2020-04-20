@@ -19,8 +19,8 @@ def test_message(message):
     emit('my response', {'data': message['data']}, broadcast=True)
 
 @socketio.on('connect', namespace='/socket_space')
-def test_connect(message):
-    print(repr(message))
+def test_connect():
+    print(request.args.get("name"))
     emit('my response', {'data': 'Connected'})
 
 @socketio.on('disconnect', namespace='/socket_space')
