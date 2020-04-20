@@ -19,7 +19,7 @@ def test_message(message):
     emit('hit_u_bak', {'respy': message['crazy']})
 
         
-@socketio.on('join')
+@socketio.on('join', namespace='/socket_space')
 def on_join(data):
     username = data['username']
     room = data['room']
@@ -28,7 +28,7 @@ def on_join(data):
     print(room)
     send(username + ' has entered the room.', room=room)
 
-@socketio.on('leave')
+@socketio.on('leave', namespace='/socket_space')
 def on_leave(data):
     username = data['username']
     room = data['room']

@@ -63,6 +63,7 @@
         });
         
         $('#join_btn').on("click", function() {
+            console.log("Sending join request")
             socket.emit('join', {username: 'The Guy', room: "Cool Room"});
         });
     });
