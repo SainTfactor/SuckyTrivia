@@ -8,13 +8,16 @@ socketio = SocketIO(app)
 
 @app.route('/')
 def index():
+    print(repr(request.args))
     session["room_id"] = request.args.get("name")
     return render_template('index.html')
 
 @socketio.on('button_clicked', namespace='/socket_space')
 def test_message(message):
+    print("Got click event")
     print(session["room_id"])
-    emit('my response', {'respy': message['crazy']})
+    print(repr(message))
+    emit('hit_u_bak', {'respy': message['crazy']})
 
 @socketio.on('my broadcast event', namespace='/socket_space')
 def test_message(message):
