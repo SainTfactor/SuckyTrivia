@@ -9,9 +9,10 @@ socketio = SocketIO(app)
 def index():
     return render_template('index.html')
 
-@socketio.on('my event', namespace='/socket_space')
+@socketio.on('button_clicked', namespace='/socket_space')
 def test_message(message):
-    emit('my response', {'data': message['data']})
+    print(message)
+    emit('my response', {'respy': message['crazy']})
 
 @socketio.on('my broadcast event', namespace='/socket_space')
 def test_message(message):

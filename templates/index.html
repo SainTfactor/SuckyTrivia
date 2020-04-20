@@ -36,10 +36,8 @@
   <div class="row content">
     <div class="col-sm-8 col-sm-offset-2 text-left"> 
       <h1>Welcome to sucky trivia</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <hr>
-      <h3>Test</h3>
-      <p>Lorem ipsum...</p>
+      <div id="test_lander"></div>
+      <button id="someButton">I'm a button bby!</button>
     </div>
   </div>
 </div>
@@ -49,12 +47,14 @@
     $(document).ready(function() {
         var socket = io.connect('http://trivia.saintfactorstudios.ml/socket_space', {query: 'name=something'});
 
-        socket.on('some_event_from_server', function(data, cb) {
-        
+        socket.on('hit_u_bak', function(data, cb) {
+            console.log(data);
+            console.log(cb);
+            $("#test_lander").html(data["respy"])
         });
 
         $('#someButton').click(function() {
-            socket.emit('markers_add', {some: 'data'});  //send `markers_add` message to server within main namespace
+            socket.emit('button_clicked', {crazy: 'stuff, yo'});  //send `markers_add` message to server within main namespace
         });
 
         $('#someOtherButton').click(function() {
