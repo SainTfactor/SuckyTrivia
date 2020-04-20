@@ -24,6 +24,8 @@ def on_join(data):
     username = data['username']
     room = data['room']
     join_room(room)
+    print("Joining up!")
+    print(room)
     send(username + ' has entered the room.', room=room)
 
 @socketio.on('leave')
