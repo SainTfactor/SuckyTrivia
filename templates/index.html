@@ -37,7 +37,7 @@
     <div class="col-sm-8 col-sm-offset-2 text-left"> 
       <h1>Welcome to sucky trivia</h1>
       <div id="test_lander"></div>
-      <button id="someButton">I'm a button bby!</button>
+      <input id="someButton" type="button" value="I'm a button bby!" />
     </div>
   </div>
 </div>
@@ -53,11 +53,11 @@
             $("#test_lander").html(data["respy"])
         });
 
-        $('#someButton').click(function() {
+        $('#someButton').on("click", function() {
             socket.emit('button_clicked', {crazy: 'stuff, yo'});  //send `markers_add` message to server within main namespace
         });
 
-        $('#someOtherButton').click(function() {
+        $('#someOtherButton').on("click", function() {
             socket.emit('icon_sets_add', {some: 'thing'}, function(response) {
                 //server may response to this request. see server side code below
             });
