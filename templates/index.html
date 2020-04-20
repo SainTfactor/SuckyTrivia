@@ -38,6 +38,7 @@
       <h1>Welcome to sucky trivia</h1>
       <div id="test_lander"></div>
       <input id="someButton" type="button" value="I'm a button bby!" />
+      <input id="join_btn" type="button" value="Join the cool kids." />
     </div>
   </div>
 </div>
@@ -45,22 +46,24 @@
 
 <script>
     $(document).ready(function() {
-        var socket = io.connect('http://trivia.saintfactorstudios.ml/socket_space', {query: 'name=something'});
+        var socket = io.connect('http://trivia.saintfactorstudios.ml/socket_space');
 
         socket.on('hit_u_bak', function(data, cb) {
             console.log(data);
             console.log(cb);
             $("#test_lander").html(data["respy"])
         });
-
-        $('#someButton').on("click", function() {
-            socket.emit('button_clicked', {crazy: 'stuff, yo'});  //send `markers_add` message to server within main namespace
+        
+        socket.on('message', function(data, cb) {
+            console.log(data);
         });
 
-        $('#someOtherButton').on("click", function() {
-            socket.emit('icon_sets_add', {some: 'thing'}, function(response) {
-                //server may response to this request. see server side code below
-            });
+        $('#someButton').on("click", function() {
+            socket.emit('button_clicked', {crazy: 'stuff, yo'});
+        });
+        
+        $('#join_btn').on("click", function() {
+            socket.emit('join', {username: 'The Guy', room: "Cool Room"});
         });
     });
 </script>

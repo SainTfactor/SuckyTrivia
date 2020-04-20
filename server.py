@@ -1,31 +1,41 @@
 from flask import Flask, render_template, session, request
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, send, join_room, leave_room
 
 app = Flask(__name__)
 app.secret_key = "Eff da police, this be temporary."
 app.debug = True
 socketio = SocketIO(app)
 
+users = []
+
 @app.route('/')
 def index():
     print(repr(request.args))
-    session["room_id"] = request.args.get("name")
+    session["room_id"] = request.args.get("q")
     return render_template('index.html')
 
 @socketio.on('button_clicked', namespace='/socket_space')
 def test_message(message):
-    print("Got click event")
-    print(session["room_id"])
-    print(repr(message))
     emit('hit_u_bak', {'respy': message['crazy']})
 
-@socketio.on('my broadcast event', namespace='/socket_space')
-def test_message(message):
-    emit('my response', {'data': message['data']}, broadcast=True)
+        
+@socketio.on('join')
+def on_join(data):
+    username = data['username']
+    room = data['room']
+    join_room(room)
+    send(username + ' has entered the room.', room=room)
 
+@socketio.on('leave')
+def on_leave(data):
+    username = data['username']
+    room = data['room']
+    leave_room(room)
+    send(username + ' has left the room.', room=room)
+    
 @socketio.on('connect', namespace='/socket_space')
 def test_connect():
-    print()
+    
     emit('my response', {'data': 'Connected'})
 
 @socketio.on('disconnect', namespace='/socket_space')
