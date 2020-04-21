@@ -1,5 +1,6 @@
 from flask import Flask, render_template, session, request
 from flask_socketio import SocketIO, emit, send, join_room, leave_room
+import uuid
 
 app = Flask(__name__)
 app.secret_key = "Eff da police, this be temporary."
@@ -15,20 +16,23 @@ def index():
 @socketio.on('start_game', namespace='/socket_space')
 def test_message(message):
     session["username"] = message["gm_name"]
-    session["room_id"] = message["room_id"]
-    join_room(message["room_id"])
-    join_room("gm-{}".format(message["room_id"]))
-    emit('hit_u_bak', {'respy': message['crazy']})
-
+    session["room"] = message["room_code"]
+    join_room(message["room_code"])
+    join_room("gm-{}".format(message["room_code"]))
         
 @socketio.on('join', namespace='/socket_space')
 def on_join(data):
+    session["guid"] = str(uuid.uuid4())
     session["username"] = data['username']
     session["room"] = data['room']
     join_room(data["room"])
-    emit("player_join", data['username'], room="gm-{}".format(data["room"]))
+    emit("player_join", { "name" : data['username'], "guid" : session["guid"] }, room="gm-{}".format(data["room"]))
     send(data["username"] + ' has entered the room.', room=data["room"])
-   
+
+@socketio.on('answer_update', namespace='/socket_space')
+def answer(data):
+    emit("push_answer", { "guid" : session["guid"], "answer" : data }, room="gm-{}".format(session["room"]))
+
 @socketio.on('connect', namespace='/socket_space')
 def test_connect():
     emit('my response', {'data': 'Connected'})
