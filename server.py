@@ -2,6 +2,7 @@ from flask import Flask, render_template, session, request
 from flask_socketio import SocketIO, emit, send, join_room, leave_room
 from functools import wraps
 import uuid
+import datetime
 
 app = Flask(__name__)
 app.secret_key = "Eff da police, this be temporary."
