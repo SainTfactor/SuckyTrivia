@@ -47,7 +47,7 @@ def on_leave():
 def get_session():
     tmp_room = str(uuid.uuid4())
     join_room(tmp_room)
-    emit("get_session", { "username" : session["username"], "room" : session["room"], "guid" : session["guid"]}, room=tmp_room)
+    emit("get_session", { "username" : session.get("username"), "room" : session.get("room"), "guid" : session.get("guid") }, room=tmp_room)
     leave_room(tmp_room)
     
 @socketio.on('answer_update', namespace='/socket_space')
