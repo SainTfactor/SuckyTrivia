@@ -1,12 +1,15 @@
 from flask import Flask, render_template, session, request
 from flask_socketio import SocketIO, emit, send, join_room, leave_room
+from flask_session import Session
+from flask_cors import CORS
 from functools import wraps
 import uuid
 import datetime
 
 app = Flask(__name__)
 app.secret_key = "Eff da police, this be temporary."
-app.debug = True
+Session(app)
+CORS(app)
 socketio = SocketIO(app)
 
 @app.before_request
