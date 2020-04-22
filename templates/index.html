@@ -36,27 +36,27 @@
 <div class="container-fluid text-center">    
   <div class="row content">
     <div class="col-sm-8 col-sm-offset-2 text-left"> 
-      <div id="start_screen">
+      <div id="start_screen" class="game_screen">
         <h1>Welcome to Sucky Trivia</h1>
       	<input id="new_btn" type="button" value="Start New Game" />
       	<input id="join_btn" type="button" value="Join Game" />
       </div>
-      <div id="gm_screen" style="display:none;">
+      <div id="gm_screen" style="display:none;" class="game_screen">
         <h1>Welcome to your game!</h1>
-	<h1>Game Code: <span id="room_code" style="font-weight:bold;"></span></h1>
-	<div data-bind="foreach: players">
-	  <div><span data-bind="text: name"></span> - <span data-bind="attr: { id: guid }"></span></div>
-	</div>
+        <h1>Game Code: <span id="room_code" style="font-weight:bold;"></span></h1>
+        <div data-bind="foreach: players">
+          <div><span data-bind="text: name"></span> - <span data-bind="attr: { id: guid }"></span></div>
+        </div>
       </div>
-      <div id="player_connect_screen" style="display:none;">
+      <div id="player_connect_screen" style="display:none;" class="game_screen">
         <h1>Type in your username and room code</h1>
-	<label for="player_username" style="font-weight:bold;">Username: </label><input id="player_username" name="player_username" type="text" />
-	<label for="join_room_code" style="font-weight:bold;">Room Code: </label><input id="join_room_code" name="join_room_code" type="text" />
-	<input id="join_game" type="button" value="Join" />
+        <label for="player_username" style="font-weight:bold;">Username: </label><input id="player_username" name="player_username" type="text" />
+        <label for="join_room_code" style="font-weight:bold;">Room Code: </label><input id="join_room_code" name="join_room_code" type="text" />
+        <input id="join_game" type="button" value="Join" />
       </div>
-      <div id="player_game_screen" style="display:none;">
+      <div id="player_game_screen" style="display:none;" class="game_screen">
         <h1>Sucky trivia</h1>
-	<input id="answer_input" type="text" />
+        <input id="answer_input" type="text" />
       </div>
       </div>
     </div>
@@ -64,67 +64,6 @@
 </div>
 
 
-<script>
-    gen_room_code = function() {
-	return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5).toUpperCase();
-    }
-
-    $(document).ready(function() {
-        var socket = io.connect('http://trivia.saintfactorstudios.ml/socket_space');
-
-        socket.on('message', function(data, cb) {
-            console.log(data);
-        });
-	
-	$("#new_btn").on("click", function(){
-	    room_code = gen_room_code();
-	    $("#room_code").html(room_code)
-            socket.emit('start_game', { gm_name: "Cookie Masterson", room_code: room_code});
-	    $("#start_screen").css("display", "none");
-	    $("#gm_screen").css("display", "block");
-            
-            function GameViewModel() {
-	    	var self = this;
-
-		self.players = ko.observableArray([]);
-
-	    	socket.on("player_join", function(data, cb){
-		    if(!self.players().some(function(val) { return data.name == val.name; })){
-			    self.players.push(data);
-		    }
-	    	});
-
-		socket.on("push_answer", function(data, cb) {
-		    console.log("data caught")
-		    $("#" + data.guid).html(data.answer)
-		});
-	    }
-	    ko.applyBindings(new GameViewModel());
- 	});
-	
-	$("#join_btn").on("click", function(){
-	    $("#start_screen").css("display", "none");
-	    $("#player_connect_screen").css("display", "block");
-	});
-
-
-        $('#join_game').on("click", function() {
-            console.log("Sending join request")
-            socket.emit('join', {username: $("#player_username").val(), room: $("#join_room_code").val()});
-	    $("#player_connect_screen").css("display", "none");
-	    $("#player_game_screen").css("display", "block");
-        });
-
-	timeout = null;
-	post_current_answer = function() {
-	  socket.emit('answer_update', $("#answer_input").val())  
-	}
-	$("#answer_input").on("keyup", function() {
-	   clearTimeout(timeout);
-           timeout = setTimeout(post_current_answer, 300);
-	});
-    });
-</script>
-
+<script src="/static/main.js"></script>
 </body>
 </html>

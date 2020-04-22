@@ -7,7 +7,12 @@ app.secret_key = "Eff da police, this be temporary."
 app.debug = True
 socketio = SocketIO(app)
 
-users = []
+@app.before_request
+def before_request():
+    session.permanent = True
+    app.permanent_session_lifetime = datetime.timedelta(minutes=60)
+    session.modified = True
+    print("Updated!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
 @app.route('/')
 def index():
