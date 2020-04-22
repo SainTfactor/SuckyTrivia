@@ -11,6 +11,9 @@ socketio = SocketIO(app)
 
 @app.before_request
 def before_request():
+    for i in session:
+        print(i)
+        print(session[i])
     session.permanent = True
     app.permanent_session_lifetime = datetime.timedelta(days=1)
     session.modified = True
@@ -55,6 +58,9 @@ def get_session():
     
 @socketio.on('answer_update', namespace='/socket_space')
 def answer(data):
+    for i in session:
+        print(i)
+        print(session[i])
     emit("push_answer", { "guid" : session["guid"], "answer" : data }, room="gm-{}".format(session["room"]))
 
 @socketio.on('connect', namespace='/socket_space')
@@ -63,6 +69,9 @@ def connect():
 
 @socketio.on('disconnect', namespace='/socket_space')
 def disconnect():
+    for i in session:
+        print(i)
+        print(session[i])
     print('Client disconnected')
 
 if __name__ == '__main__':
