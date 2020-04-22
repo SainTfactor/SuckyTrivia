@@ -1,8 +1,8 @@
 .navbar {
   margin-bottom: 0;
   border-radius: 0;
-  background-color: #3995a2;
-  border-color: #208493;
+  background-color: #5356b5;
+  border-color: #241f90;
 }
 
 .navbar-collapse.collapse {
@@ -23,4 +23,12 @@
 
 .navbar-brand {
   padding: 10px 10px;
+}
+
+.warning_link_outline {
+  color: #eea236;
+  background-color: none;
+  border-radius: 7px;
+  font-weight: bold;
+  border: 1.5px solid transparent;
 }
