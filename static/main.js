@@ -7,10 +7,10 @@ show_screen = function(screen_name) {
     $("#" + screen_name).css("display", "block");
 }
 
-join_game_player = function(socket, username, room, guid) {    
+join_game_player = function(socket, username, room, guid) { 
+    $("#leave_game").css("display", "block");   
     socket.emit('join', {username: username, room: room, guid: guid});
     show_screen("player_game_screen");
-    $("#leave_game").css("display", "block");
 }
 
 join_game_owner = function(socket, room_code) {
@@ -48,6 +48,7 @@ $(document).ready(function() {
     
     socket.emit('get_session')
     socket.on('get_session', function(data, cb) {
+        console.log(data);
         if (data.username == "Cookie Masterson") {
             join_game_owner(socket, data.room)
         } else if (data.guid) { 
