@@ -39,9 +39,16 @@ def on_join(data):
 @socketio.on('leave', namespace='/socket_space')
 def on_leave():
     send(session["username"] + ' has left the room.', room=session["room"])
+    leave_room(session["room"])
     session.clear()
     session.modified = True
 
+@socketio.on('get_session', namespace='/socket_space')
+def get_session():
+    tmp_room = str(uuid.uuid4())
+    join_room(tmp_room)
+    emit("get_session", { "username" : session["username"], "room" : session["room"], "guid" : session["guid"]}, room=tmp_room)
+    leave_room(tmp_room)
     
 @socketio.on('answer_update', namespace='/socket_space')
 def answer(data):
