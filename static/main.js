@@ -7,36 +7,57 @@ show_screen = function(screen_name) {
     $("#" + screen_name).css("display", "block");
 }
 
+join_game_player = function(socket, username, room, guid) {    
+    socket.emit('join', {username: username, room: room, guid: guid});
+    show_screen("player_game_screen");
+    $("#leave_game").css("display", "block");
+}
+
+join_game_owner = function(socket, room_code) {
+    $("#leave_game").css("display", "block");
+    $("#room_code").html(room_code);
+    socket.emit('start_game', { gm_name: "Cookie Masterson", room_code: room_code});
+    show_screen("gm_screen");
+        
+    function GameViewModel() {
+        var self = this;
+
+        self.players = ko.observableArray([]);
+
+        socket.on("player_join", function(data, cb){
+            if(!self.players().some(function(val) { return data.name == val.name; })){
+                self.players.push(data);
+            }
+        });
+
+        socket.on("push_answer", function(data, cb) {
+            console.log("data caught")
+            $("#" + data.guid).html(data.answer)
+        });
+    }
+    ko.applyBindings(new GameViewModel());
+
+}
+
 $(document).ready(function() {
     var socket = io.connect('http://trivia.saintfactorstudios.ml/socket_space');
 
     socket.on('message', function(data, cb) {
         console.log(data);
     });
+    
+    socket.emit('get_session')
+    socket.on('get_session', function(data, cb) {
+        if (data.username == "Cookie Masterson") {
+            join_game_owner(socket, data.room)
+        } else if (data.guid) { 
+            join_game_player(socket, data.username, data.room, data.guid)
+        }
+    });
 
     $("#new_btn").on("click", function(){
         room_code = gen_room_code();
-        $("#room_code").html(room_code);
-        socket.emit('start_game', { gm_name: "Cookie Masterson", room_code: room_code});
-        show_screen("gm_screen");
-            
-        function GameViewModel() {
-            var self = this;
-
-            self.players = ko.observableArray([]);
-
-            socket.on("player_join", function(data, cb){
-                if(!self.players().some(function(val) { return data.name == val.name; })){
-                    self.players.push(data);
-                }
-            });
-
-            socket.on("push_answer", function(data, cb) {
-                console.log("data caught")
-                $("#" + data.guid).html(data.answer)
-            });
-        }
-        ko.applyBindings(new GameViewModel());
+        join_game_owner(socket, room_code)
     });
 
     $("#join_btn").on("click", function(){
@@ -45,8 +66,12 @@ $(document).ready(function() {
 
     $('#join_game').on("click", function() {
         console.log("Sending join request")
-        socket.emit('join', {username: $("#player_username").val(), room: $("#join_room_code").val()});
-        show_screen("player_game_screen");
+        join_game_player(socket, $("#player_username").val(), $("#join_room_code").val(), "new")
+    });
+
+    $('#leave_game').on("click", function() {
+        socket.emit("leave")
+        $("#leave_game").css("display", "none");
     });
 
     timeout = null;
