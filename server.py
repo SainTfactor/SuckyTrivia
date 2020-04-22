@@ -28,7 +28,7 @@ def start_game(message):
         
 @socketio.on('join', namespace='/socket_space')
 def on_join(data):
-    if data.guid != "new":
+    if data["guid"] == "new":
         session["guid"] = str(uuid.uuid4())
     session["username"] = data['username']
     session["room"] = data['room']
