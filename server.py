@@ -12,13 +12,10 @@ SESSION_TYPE = "filesystem"
 app.config.from_object(__name__)
 app.debug = True
 Session(app)
-socketio = SocketIO(app)
+socketio = SocketIO(app, manage_session=False)
 
 @app.before_request
 def before_request():
-    for i in session:
-        print(i)
-        print(session[i])
     session.permanent = True
     app.permanent_session_lifetime = datetime.timedelta(days=1)
     session.modified = True
@@ -55,17 +52,11 @@ def on_leave():
 def get_session():
     tmp_room = str(uuid.uuid4())
     join_room(tmp_room)
-    for i in session:
-        print(i)
-        print(session[i])
     emit("get_session", { "username" : session.get("username"), "room" : session.get("room"), "guid" : session.get("guid") }, room=tmp_room)
     leave_room(tmp_room)
     
 @socketio.on('answer_update', namespace='/socket_space')
 def answer(data):
-    for i in session:
-        print(i)
-        print(session[i])
     emit("push_answer", { "guid" : session["guid"], "answer" : data }, room="gm-{}".format(session["room"]))
 
 @socketio.on('connect', namespace='/socket_space')
@@ -74,9 +65,6 @@ def connect():
 
 @socketio.on('disconnect', namespace='/socket_space')
 def disconnect():
-    for i in session:
-        print(i)
-        print(session[i])
     print('Client disconnected')
 
 if __name__ == '__main__':
