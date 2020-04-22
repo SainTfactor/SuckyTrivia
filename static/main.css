@@ -27,8 +27,8 @@
 
 .warning_link_outline {
   color: #eea236;
-  background-color: none;
+  background-color: transparent;
   border-radius: 7px;
   font-weight: bold;
-  border: 1.5px solid transparent;
+  border: 1.5px solid #eea236;
 }
