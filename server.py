@@ -12,7 +12,6 @@ SESSION_TYPE = "filesystem"
 app.config.from_object(__name__)
 app.debug = True
 Session(app)
-CORS(app)
 socketio = SocketIO(app)
 
 @app.before_request
