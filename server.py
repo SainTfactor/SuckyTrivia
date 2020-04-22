@@ -7,8 +7,9 @@ import uuid
 import datetime
 
 app = Flask(__name__)
-app.secret_key = "Eff da police, this be temporary."
-app.session_type = "filesystem"
+SECRET_KEY = "Eff da police, this be temporary."
+SESSION_TYPE = "filesystem"
+app.config.from_object(__name__)
 app.debug = True
 Session(app)
 CORS(app)
