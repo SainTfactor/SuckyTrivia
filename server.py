@@ -8,6 +8,7 @@ import datetime
 
 app = Flask(__name__)
 app.secret_key = "Eff da police, this be temporary."
+app.session_type = "filesystem"
 app.debug = True
 Session(app)
 CORS(app)
