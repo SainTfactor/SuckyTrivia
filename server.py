@@ -12,6 +12,7 @@ socketio = SocketIO(app)
 def keep_alive(f):
     @wraps(f)
     def wrapper(*args, **kwds):
+        app.permanent_session_lifetime = datetime.timedelta(minutes=60)
         session.modified = True
         print("Keep away!!!!!!!!")
         return f(*args, **kwds)
