@@ -10,20 +10,7 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.debug.min.js"></script>
-  <style>
-    .navbar {
-      margin-bottom: 0;
-      border-radius: 0;
-      background-color: #3995a2;
-      border-color: #208493;
-    }
-    .navbar-brand {
-      padding: 10px 10px;
-    }
-    .nav_text {
-    }
-    
-  </style>
+  <link rel="stylesheet" href="/static/main.css">
 </head>
 <body>
 
@@ -32,9 +19,11 @@
     <div class="navbar-header">
       <a class="navbar-brand" href="#"><img src="http://saintfactorstudios.ml/SainTfactorStudiosIP/WingedTTransparent.png" alt="Winged T" height="32" width="32"></a>
     </div>
-    <span class="navbar-text navbar-right">
-        <a href="#" id="leave_game" class="nav_text" style="display:none;">Leave Game</a>
-    </span>
+    <div class="collapse navbar-collapse" id="navbarText">
+      <span class="navbar-text">
+        <a href="#" id="leave_game" class="btn btn-outline-secondary btn-sm" style="display:none;">Leave Game</a>
+      </span>
+    </div>
   </div>
 </nav>
   
