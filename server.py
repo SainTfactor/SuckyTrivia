@@ -47,6 +47,9 @@ def on_leave():
 def get_session():
     tmp_room = str(uuid.uuid4())
     join_room(tmp_room)
+    for i in session:
+        print(i)
+        print(session[i])
     emit("get_session", { "username" : session.get("username"), "room" : session.get("room"), "guid" : session.get("guid") }, room=tmp_room)
     leave_room(tmp_room)
     
