@@ -73,6 +73,7 @@ $(document).ready(function() {
     $('#leave_game').on("click", function() {
         socket.emit("leave")
         $("#leave_game").css("display", "none");
+        show_screen("start_screen")
     });
 
     timeout = null;

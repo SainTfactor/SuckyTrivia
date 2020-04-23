@@ -29,7 +29,8 @@
   
 <div class="container-fluid text-center">    
   <div class="row content">
-    <div class="col-sm-8 col-sm-offset-2 text-left"> 
+    <div id="left_column" class="col-sm-3 text-center"></div>
+    <div class="col-sm-6 text-center"> 
       <div id="start_screen" class="game_screen">
         <h1>Welcome to Sucky Trivia</h1>
       	<input id="new_btn" type="button" value="Start New Game" />
@@ -37,22 +38,36 @@
       </div>
       <div id="gm_screen" style="display:none;" class="game_screen">
         <h1>Welcome to your game!</h1>
-        <h1>Game Code: <span id="room_code" style="font-weight:bold;"></span></h1>
-        <div data-bind="foreach: players">
-          <div><span data-bind="text: name"></span> - <span data-bind="attr: { id: guid }"></span></div>
+        <h2>Game Code: <span id="room_code" style="font-weight:bold;"></span></h2>
+        <div data-bind="foreach: players" class="row">
+          <div class="col-sm-3">
+            <h3 data-bind="text: name"></h3>
+            <div data-bind="attr: { id: guid }"></div>
+          </div>
         </div>
       </div>
       <div id="player_connect_screen" style="display:none;" class="game_screen">
-        <h1>Type in your username and room code</h1>
-        <label for="player_username" style="font-weight:bold;">Username: </label><input id="player_username" name="player_username" type="text" />
-        <label for="join_room_code" style="font-weight:bold;">Room Code: </label><input id="join_room_code" name="join_room_code" type="text" />
-        <input id="join_game" type="button" value="Join" />
+        <h1>Type in your username and room code</h1>        
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Username</span>
+          </div>
+            <input id="player_username" class="form-control" type="text" />
+        </div>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Room Code</span>
+          </div>
+          <input id="join_room_code" class="form-control" type="text" />
+        </div>        
+        <input id="join_game" class="btn btn-dark" type="button" value="Join" />
       </div>
       <div id="player_game_screen" style="display:none;" class="game_screen">
         <h1>Sucky trivia</h1>
-        <input id="answer_input" type="text" />
+        <div id="question_posed"></div>
+        <input id="answer_input" class="form-control" type="text" placeholder="Type your answers here." />
       </div>
-      </div>
+      <div id="right_column" class="col-sm-3 text-center"></div>
     </div>
   </div>
 </div>
