@@ -37,3 +37,26 @@
   font-weight: bold;
   border: 1.5px solid #eea236;
 }
+
+.input-group-addon:first-child {
+  min-width: 100px;
+}
+
+.input-group {
+  margin-bottom: 16px;
+}
+
+#join_game {
+  width: 20%;
+}
+
+.user-box {
+    border: 2px solid black;
+    border-radius: 15px;
+    margin: 5px;
+    padding: 10px;
+    min-height: 120px;
+}
+.user-box h3 {
+    margin-top: 0;
+}
