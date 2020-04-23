@@ -45,6 +45,8 @@ join_game_owner = function(socket, room_code) {
     show_screen("gm_screen");
      
     socket.on("answer_locked", function(data, cb) {
+        console.log(data.guid)
+        console.log("???")
         $("[guid=" + data.guid + "]").css("display", "block");
         $("[guid=" + data.guid + "]").on("click", function(){
             socket.emit("unlock", { guid: data.guid })
