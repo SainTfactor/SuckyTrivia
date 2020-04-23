@@ -9,7 +9,7 @@
   display: block!important;
 }
 
-.navbar-nav>span, .navbar-nav {
+.navbar-nav>a, .navbar-nav {
   float: left !important;
 }
 
@@ -24,6 +24,10 @@
 .navbar-brand {
   padding: 10px 10px;
   height: initial;
+}
+
+.navbar-header {
+  float: left!important
 }
 
 .warning_link_outline {
