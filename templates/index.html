@@ -43,6 +43,7 @@
           <div class="user-box col-xs-3">
             <h3 data-bind="text: name"></h3>
             <div data-bind="attr: { id: guid }"></div>
+            <div data-bind="attr: { data-guid: guid }" style="display:none;"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></div>
           </div>
         </div>
       </div>
@@ -66,6 +67,7 @@
         <h1>Sucky trivia</h1>
         <div id="question_posed"></div>
         <input id="answer_input" class="form-control" type="text" placeholder="Type your answers here." />
+        <input id="lock_answer" class="btn btn-lg btn-dark" type="button" value="Lock in Answer" />
       </div>
       <div id="right_column" class="col-sm-3 text-center"></div>
     </div>

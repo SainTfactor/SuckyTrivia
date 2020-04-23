@@ -38,6 +38,7 @@ def on_join(data):
     session["username"] = data['username']
     session["room"] = data['room']
     join_room(data["room"])
+    join_room(session["guid"])
     emit("player_join", { "name" : data['username'], "guid" : session["guid"] }, room="gm-{}".format(data["room"]))
     send(data["username"] + ' has entered the room.', room=data["room"])
     
@@ -59,6 +60,17 @@ def get_session():
 def answer(data):
     emit("push_answer", { "guid" : session["guid"], "answer" : data }, room="gm-{}".format(session["room"]))
 
+@socketio.on('answer_locked', namespace='/socket_space')
+def answer_locked(data):
+    emit("answer_locked", { "guid" : session["guid"] }, room="gm-{}".format(session["room"]))
+
+@socketio.on('unlock', namespace='/socket_space')
+def unlock(data):
+    if data.get("guid"):
+        emit("unlock", room=data["guid"])
+    else:
+        emit("unlock")
+    
 @socketio.on('connect', namespace='/socket_space')
 def connect():
     emit('my response', {'data': 'Connected'})

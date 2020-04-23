@@ -7,10 +7,35 @@ show_screen = function(screen_name) {
     $("#" + screen_name).css("display", "block");
 }
 
+lock_answer = function() {
+   $("#answer_input").prop("disabled", true);
+   $("#lock_answer").prop("disabled", true);
+   socket.emit("answer_locked");
+}
+reset_answer_locks = function() {
+   $("#answer_input").prop("disabled", false);
+   $("#lock_answer").prop("disabled", false);
+   $("#answer_input").val("");
+}
+
+// Main Split
 join_game_player = function(socket, username, room, guid) { 
     $("#leave_game").css("display", "block");   
     socket.emit('join', {username: username, room: room, guid: guid});
     show_screen("player_game_screen");
+    
+    socket.on("unlock", function() {
+      reset_answer_locks();
+    });
+    
+    timeout = null;
+    post_current_answer = function() {
+      socket.emit('answer_update', $("#answer_input").val())  
+    }
+    $("#answer_input").on("keyup", function() {
+       clearTimeout(timeout);
+           timeout = setTimeout(post_current_answer, 300);
+    });
 }
 
 join_game_owner = function(socket, room_code) {
@@ -18,7 +43,14 @@ join_game_owner = function(socket, room_code) {
     $("#room_code").html(room_code);
     socket.emit('start_game', { gm_name: "Cookie Masterson", room_code: room_code});
     show_screen("gm_screen");
-        
+     
+    socket.on("answer_locked", function(data, cb) {
+        $("[data-guid=" + data.guid + "]").css("display", "block");
+        $("[data-guid=" + data.guid + "]").on("click", function(){
+            socket.emit("unlock", { guid: data.guid })
+        })
+    });   
+     
     function GameViewModel() {
         var self = this;
 
@@ -39,6 +71,7 @@ join_game_owner = function(socket, room_code) {
 
 }
 
+// Game Controls
 $(document).ready(function() {
     var socket = io.connect('http://trivia.saintfactorstudios.ml/socket_space');
 
@@ -67,7 +100,7 @@ $(document).ready(function() {
 
     $('#join_game').on("click", function() {
         console.log("Sending join request")
-        join_game_player(socket, $("#player_username").val(), $("#join_room_code").val(), "new")
+        join_game_player(socket, $("#player_username").val(), $("#join_room_code").val().toUpperCase(), "new")
     });
 
     $('#leave_game').on("click", function() {
@@ -75,13 +108,8 @@ $(document).ready(function() {
         $("#leave_game").css("display", "none");
         show_screen("start_screen")
     });
-
-    timeout = null;
-    post_current_answer = function() {
-      socket.emit('answer_update', $("#answer_input").val())  
-    }
-    $("#answer_input").on("keyup", function() {
-       clearTimeout(timeout);
-           timeout = setTimeout(post_current_answer, 300);
+    
+    $("#lock_answer").on("click", function(){
+        lock_answer();
     });
 });
