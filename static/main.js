@@ -7,7 +7,7 @@ show_screen = function(screen_name) {
     $("#" + screen_name).css("display", "block");
 }
 
-lock_answer = function() {
+lock_answer = function(socket) {
    $("#answer_input").prop("disabled", true);
    $("#lock_answer").prop("disabled", true);
    socket.emit("answer_locked");
@@ -26,6 +26,10 @@ join_game_player = function(socket, username, room, guid) {
     
     socket.on("unlock", function() {
       reset_answer_locks();
+    });
+    
+    socket.on("lock", function() {
+      lock_answer(socket);
     });
     
     timeout = null;
@@ -112,6 +116,6 @@ $(document).ready(function() {
     });
     
     $("#lock_answer").on("click", function(){
-        lock_answer();
+        lock_answer(socket);
     });
 });
