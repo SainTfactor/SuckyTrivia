@@ -5,10 +5,11 @@
   <meta charset="utf-8">
   <link rel='icon' href='http://saintfactorstudios.ml/SainTfactorStudiosIP/favicon.ico' type='image/x-icon'/ >
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.debug.min.js"></script>
   <link rel="stylesheet" href="/static/main.css">
 </head>
@@ -50,13 +51,13 @@
       <div id="player_connect_screen" style="display:none;" class="game_screen">
         <h1>Type in your username and room code</h1>        
         <div class="input-group">
-          <div class="input-group-addon">
+          <div class="input-group-prepend">
             <span class="input-group-text" id="username-label">Username</span>
           </div>
           <input id="player_username" class="form-control" type="text" placeholder="Username" aria-label="Username" aria-describedby="username-label" />
         </div>
         <div class="input-group">
-          <div class="input-group-addon">
+          <div class="input-group-prepend">
             <span class="input-group-text" id="room-code-label">Room Code</span>
           </div>
           <input id="join_room_code" class="form-control" type="text" placeholder="Room Code" aria-label="Room Code" aria-describedby="room-code-label" />
