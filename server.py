@@ -61,7 +61,7 @@ def answer(data):
     emit("push_answer", { "guid" : session["guid"], "answer" : data }, room="gm-{}".format(session["room"]))
 
 @socketio.on('answer_locked', namespace='/socket_space')
-def answer_locked(data):
+def answer_locked():
     emit("answer_locked", { "guid" : session["guid"] }, room="gm-{}".format(session["room"]))
 
 @socketio.on('unlock', namespace='/socket_space')
