@@ -9,7 +9,7 @@
   display: block!important;
 }
 
-.navbar-nav>li, .navbar-nav {
+.navbar-nav>span, .navbar-nav {
   float: left !important;
 }
 
@@ -23,6 +23,7 @@
 
 .navbar-brand {
   padding: 10px 10px;
+  height: initial;
 }
 
 .warning_link_outline {
