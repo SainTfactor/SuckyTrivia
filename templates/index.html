@@ -11,6 +11,7 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.debug.min.js"></script>
+  <script src="https://kit.fontawesome.com/2c0cefed81.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="/static/main.css">
 </head>
 <body>
@@ -42,7 +43,9 @@
           <div class="user-box col-xs-3">
             <h4 data-bind="text: name"></h4>
             <div data-bind="attr: { id: guid }"></div>
-            <div data-bind="attr: { guid: guid }" style="display:none;margin-top:10px;"><span class="glyphicon glyphicon-lock" style="cursor:pointer" aria-hidden="true"></span></div>
+            <div data-bind="attr: { guid: guid }" style="display:none;margin-top:10px;">
+                <i class="fas fa-lock" style="cursor:pointer"></i>
+            </div>
           </div>
         </div>
       </div>
