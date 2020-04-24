@@ -21,15 +21,6 @@
   float: right!important;
 }
 
-.navbar-brand {
-  padding: 10px 10px;
-  height: initial;
-}
-
-.navbar-header {
-  float: left!important
-}
-
 .warning_link_outline {
   color: #eea236;
   background-color: transparent;
@@ -38,7 +29,7 @@
   border: 1.5px solid #eea236;
 }
 
-.input-group-addon:first-child {
+.input-group-prepend:first-child {
   min-width: 100px;
 }
 
