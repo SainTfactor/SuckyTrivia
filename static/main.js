@@ -67,7 +67,7 @@ join_game_owner = function(socket, room_code) {
     });
      
     $("#lock_all_answers").on("click", function() {
-        socket.emit("lock")
+        socket.emit("lock", {})
     });
      
     function GameViewModel() {
