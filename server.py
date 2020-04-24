@@ -70,6 +70,13 @@ def unlock(data):
         emit("unlock", room=data["guid"])
     else:
         emit("unlock")
+        
+@socketio.on('lock', namespace='/socket_space')
+def lock(data):
+    if data.get("guid"):
+        emit("lock", room=data["guid"])
+    else:
+        emit("lock")
     
 @socketio.on('connect', namespace='/socket_space')
 def connect():

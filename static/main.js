@@ -27,20 +27,20 @@ join_game_player = function(socket, username, room, guid) {
     show_screen("player_game_screen");
     
     socket.on("unlock", function() {
-      reset_answer_locks();
+        reset_answer_locks();
     });
     
     socket.on("lock", function() {
-      lock_answer(socket);
+        lock_answer(socket);
     });
     
     timeout = null;
     post_current_answer = function() {
-      socket.emit('answer_update', $("#answer_input").val())  
+        socket.emit('answer_update', $("#answer_input").val())  
     }
     $("#answer_input").on("keyup", function() {
-       clearTimeout(timeout);
-           timeout = setTimeout(post_current_answer, 300);
+        clearTimeout(timeout);
+        timeout = setTimeout(post_current_answer, 300);
     });
 }
 
@@ -58,6 +58,17 @@ join_game_owner = function(socket, room_code) {
             $("[guid=" + data.guid + "]").css("display", "none");
         })
     });   
+    
+    $("#import_questions").on("click", function() {
+        show_screen("question_input_screen");
+    });
+    $("#save_questions").on("click", function() {
+        show_screen("gm_screen");
+    });
+     
+    $("#lock_all_answers").on("click", function() {
+        
+    });
      
     function GameViewModel() {
         var self = this;
@@ -68,6 +79,32 @@ join_game_owner = function(socket, room_code) {
             if(!self.players().some(function(val) { return data.name == val.name; })){
                 self.players.push(data);
             }
+        });
+        
+        self.questions = ko.observableArray([]);
+        timeout = null;
+        process_questions = function() {
+           self.questions.removeAll()
+           raw_data = $("#question_input_box").val()
+           q_arry = raw_data.split("\n\n")
+           q_arry.forEach(function(val){
+               part_arry = val.split("\n")
+               a_question = { question: "", answer: "", points: 0 }
+               if (part_arry[0] != undefined) {
+                   a_question.question = part_arry[0]
+               }
+               if (part_arry[1] != undefined) {
+                   a_question.answer = part_arry[1]
+               }
+               if (part_arry[2] != undefined) {
+                   a_question.points = parseInt(part_arry[2].replace(/\D/g,''))
+               }
+               self.questions.push(a_question)
+           });
+        }
+        $("#question_input_box").on("keyup", function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(process_questions, 300);
         });
 
         socket.on("push_answer", function(data, cb) {
