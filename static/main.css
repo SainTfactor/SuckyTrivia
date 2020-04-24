@@ -4,18 +4,6 @@
   border-color: #241f90;
 }
 
-.navbar-nav>a, .navbar-nav {
-  float: left !important;
-}
-
-.navbar-nav.navbar-right:last-child {
-  margin-right: -15px !important;
-}
-
-.navbar-right {
-  float: right!important;
-}
-
 .warning_link_outline {
   color: #eea236;
   background-color: transparent;
