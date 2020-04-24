@@ -120,4 +120,10 @@ $(document).ready(function() {
     $("#lock_answer").on("click", function(){
         lock_answer(socket);
     });
+    
+    $(".submit_on_enter").on("keypress", function(event) {
+        if (event.keyCode == 13 || event.which == 13) {
+            $('#join_game').click();
+        }
+    });
 });
