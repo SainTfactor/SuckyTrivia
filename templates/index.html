@@ -40,9 +40,9 @@
         <h1>Welcome to your game!</h1>
         <h2>Game Code: <span id="room_code" style="font-weight:bold;"></span></h2>
         <div data-bind="foreach: players" class="row">
-          <div class="col-3">
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
             <div class="user-box">
-              <h4 data-bind="text: name"></h4>
+              <h4 data-bind="text: name" style="overflow:hidden"></h4>
               <div data-bind="attr: { id: guid }"></div>
               <div data-bind="attr: { guid: guid }" style="display:none;margin-top:10px;">
                   <i class="fas fa-lock" style="cursor:pointer"></i>
