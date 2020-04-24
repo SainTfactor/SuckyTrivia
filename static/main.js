@@ -31,6 +31,7 @@ join_game_player = function(socket, username, room, guid) {
     });
     
     socket.on("lock", function() {
+        console.log("Orders to shut down sir!")
         lock_answer(socket);
     });
     
