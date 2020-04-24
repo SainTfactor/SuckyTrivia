@@ -70,8 +70,10 @@
             <div class="col-8">
               <div data-bind="foreach: questions" class="row preview_area">
                   <div class="col-12 col-lg-6">
-                    <h4><span data-bind="text: question"></span><small> (<span data-bind="text: points"></span>pts.</small>)</h4>                    
-                    <div data-bind="text: answer"></div>
+                    <div class="question-box">
+                      <h4><span data-bind="text: question"></span><small> (<span data-bind="text: points"></span>pts.</small>)</h4>                    
+                      <div data-bind="text: answer"></div>
+                    </div>
                   </div>
               </div>
             </div>
