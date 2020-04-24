@@ -69,7 +69,7 @@ def unlock(data):
     if data.get("guid"):
         emit("unlock", room=data["guid"])
     else:
-        emit("unlock")
+        emit("unlock", room=session["room"])
         
 @socketio.on('lock', namespace='/socket_space')
 def lock(data):
@@ -78,7 +78,7 @@ def lock(data):
         emit("lock", room=data["guid"])
     else:
         print("Wee woo Wee woo")
-        emit("lock")
+        emit("lock", room=session["room"])
     
 @socketio.on('connect', namespace='/socket_space')
 def connect():
