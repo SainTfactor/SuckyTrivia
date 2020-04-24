@@ -29,8 +29,8 @@
   
 <div class="container-fluid text-center">    
   <div class="row content">
-    <div id="left_column" class="col-sm-3 text-center"></div>
-    <div class="col-sm-6 text-center"> 
+    <div id="left_column" class="col-sm-2 text-center"></div>
+    <div class="col-sm-8 text-center"> 
       <div id="start_screen" class="game_screen">
         <h1>Welcome to Sucky Trivia</h1>
       	<input id="new_btn" type="button" class="btn btn-primary" value="Start New Game" />
@@ -40,9 +40,9 @@
         <h1>Welcome to your game!</h1>
         <h2>Game Code: <span id="room_code" style="font-weight:bold;"></span></h2>
         <div data-bind="foreach: players" class="row">
-          <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3 box_wrapper">
             <div class="user-box">
-              <h4 data-bind="text: name" style="overflow:hidden"></h4>
+              <h4 data-bind="text: name"></h4>
               <div data-bind="attr: { id: guid }"></div>
               <div data-bind="attr: { guid: guid }" style="display:none;margin-top:10px;">
                   <i class="fas fa-lock" style="cursor:pointer"></i>
@@ -73,7 +73,7 @@
         <input id="answer_input" class="form-control" type="text" placeholder="Type your answers here." />
         <input id="lock_answer" class="btn btn-lg btn-primary" type="button" value="Lock in Answer" />
       </div>
-      <div id="right_column" class="col-sm-3 text-center"></div>
+      <div id="right_column" class="col-sm-2 text-center"></div>
     </div>
   </div>
 </div>

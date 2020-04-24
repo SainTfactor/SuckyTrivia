@@ -29,12 +29,24 @@
   margin-bottom: 15px;
 }
 
+input#lock_answer:disabled {
+    cursor: default;
+}
+
 .user-box {
     border: 2px solid black;
     border-radius: 15px;
     padding: 10px;
     min-height: 135px;
 }
-.user-box h3 {
-    margin-top: 0;
+.user-box h4 {
+    overflow:hidden
 }
+
+.box_wrapper {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+
+
