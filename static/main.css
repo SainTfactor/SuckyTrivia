@@ -53,7 +53,7 @@ input#lock_answer:disabled {
 }
 
 .preview_area {
-    height: 32em;
+    max-height: 32em;
     overflow-y: scroll;
 }
 
