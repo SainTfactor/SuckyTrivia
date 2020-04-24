@@ -10,11 +10,13 @@ show_screen = function(screen_name) {
 lock_answer = function(socket) {
    $("#answer_input").prop("disabled", true);
    $("#lock_answer").prop("disabled", true);
+   $("#lock_answer").val("LOCKED");
    socket.emit("answer_locked");
 }
 reset_answer_locks = function() {
    $("#answer_input").prop("disabled", false);
    $("#lock_answer").prop("disabled", false);
+   $("#lock_answer").val("Lock in Answer");
    $("#answer_input").val("");
 }
 

@@ -1,12 +1,7 @@
 .navbar {
-  margin-bottom: 0;
-  border-radius: 0;
+  margin-bottom: 10px;
   background-color: #5356b5;
   border-color: #241f90;
-}
-
-.navbar-collapse.collapse {
-  display: block!important;
 }
 
 .navbar-nav>a, .navbar-nav {
