@@ -12,8 +12,9 @@
   border: 1.5px solid #eea236;
 }
 
-.input-group-prepend:first-child {
+.input-group-text {
   min-width: 100px;
+  justify-content: center;
 }
 
 .input-group {
@@ -32,7 +33,7 @@
     border: 2px solid black;
     border-radius: 15px;
     margin: 5px;
-    padding: 10px;
+    padding: 15px;
     min-height: 120px;
 }
 .user-box h3 {
