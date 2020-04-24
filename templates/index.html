@@ -61,15 +61,16 @@
       <!-- Input questions Screen -->
       <div id="question_input_screen" style="display:none;" class="game_screen">
         <h1>Input your trivia questions!!!</h1>
+        <p>Questions should be input in the format shown below (Question > answer > point value, all on seperate lines, and a blank line between questions).  </p>
         <div class="row">
             <div class="col-4">
-              <textarea id="question_input_box" class="form-control" rows="40" placeholder="This is my first question?&#10;Yes it is.&#10;5pts&#10;&#10;But is this the THIRD question?&#10;Nope&#10;10"></textarea>
+              <textarea id="question_input_box" class="form-control" rows="20" placeholder="This is my first question?&#10;Yes it is.&#10;5pts&#10;&#10;But is this the THIRD question?&#10;Nope&#10;10"></textarea>
               <input id="save_questions" class="btn btn-lg btn-primary" type="button" value="Save Questions" />
             </div>
             <div class="col-8">
-              <div data-bind="foreach: questions" class="row">
-                  <div class="col-12 col-md-6">
-                    <h4><span data-bind="text: question"></span><small><span data-bind="text: points"></span>pts.</small></h4>                    
+              <div data-bind="foreach: questions" class="row preview_area">
+                  <div class="col-12 col-lg-6">
+                    <h4><span data-bind="text: question"></span><small> (<span data-bind="text: points"></span>pts.</small>)</h4>                    
                     <div data-bind="text: answer"></div>
                   </div>
               </div>

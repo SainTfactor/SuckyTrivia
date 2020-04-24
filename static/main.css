@@ -48,5 +48,13 @@ input#lock_answer:disabled {
     margin-bottom: 15px;
 }
 
+#question_input_box {
+    margin-bottom: 15px;
+}
+
+.preview_area {
+    max-height: 29em;
+    overflow-y: scroll;
+}
 
 

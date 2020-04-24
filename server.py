@@ -73,11 +73,9 @@ def unlock(data):
         
 @socketio.on('lock', namespace='/socket_space')
 def lock(data):
-    print("Kill it with fire!")
     if data.get("guid"):
         emit("lock", room=data["guid"])
     else:
-        print("Wee woo Wee woo")
         emit("lock", room=session["room"])
     
 @socketio.on('connect', namespace='/socket_space')

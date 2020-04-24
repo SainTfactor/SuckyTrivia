@@ -31,7 +31,6 @@ join_game_player = function(socket, username, room, guid) {
     });
     
     socket.on("lock", function() {
-        console.log("Orders to shut down sir!")
         lock_answer(socket);
     });
     
@@ -90,7 +89,7 @@ join_game_owner = function(socket, room_code) {
            q_arry = raw_data.split("\n\n")
            q_arry.forEach(function(val){
                part_arry = val.split("\n")
-               a_question = { question: "", answer: "", points: 0 }
+               a_question = { question: "<Missing Question>", answer: "<Missing Answer>", points: 0 }
                if (part_arry[0] != undefined) {
                    a_question.question = part_arry[0]
                }
@@ -109,7 +108,6 @@ join_game_owner = function(socket, room_code) {
         });
 
         socket.on("push_answer", function(data, cb) {
-            console.log("data caught")
             $("#" + data.guid).html(data.answer)
         });
     }
@@ -127,7 +125,6 @@ $(document).ready(function() {
     
     socket.emit('get_session')
     socket.on('get_session', function(data, cb) {
-        console.log(data);
         if (data.username == "Cookie Masterson") {
             join_game_owner(socket, data.room)
         } else if (data.guid) { 
@@ -145,7 +142,6 @@ $(document).ready(function() {
     });
 
     $('#join_game').on("click", function() {
-        console.log("Sending join request")
         join_game_player(socket, $("#player_username").val(), $("#join_room_code").val().toUpperCase(), "new")
     });
 
