@@ -98,7 +98,7 @@ join_game_owner = function(socket, room_code) {
             if (self.questions().length != 0) {
                 $("#import_questions").css("display", "none");
                 $("#start_game").css("display", "none");
-                $(".controls").css("display", "block");
+                $("#controls").css("display", "block");
                 self.current_question = 0;
                 send_question();
             } else {
