@@ -162,11 +162,11 @@ $(document).ready(function() {
     });
     
     socket.on("receive_question", function(data, cb) {
-        $(".question_here").forEach(function(val){ $(val).html(data); });
-        $(".answer_here").forEach(function(val){ $(val).html(""); });
+        $(".question_here").each(function(i,val){ $(val).html(data); });
+        $(".answer_here").each(function(i,val){ $(val).html(""); });
     });
     socket.on("receive_answer", function(data, cb) {
-        $(".answer_here").forEach(function(val){ $(val).html(data); });
+        $(".answer_here").each(function(i,val){ $(val).html(data); });
     });
 
     $("#new_btn").on("click", function(){
