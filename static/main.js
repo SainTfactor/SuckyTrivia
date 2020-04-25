@@ -46,8 +46,8 @@ join_game_player = function(socket, username, room, guid) {
 
 join_game_owner = function(socket, room_code) {
     $("#leave_game").css("display", "block");
-    $("#import_questions").css("display", "block");
-    $("#start_game").css("display", "block");
+    $("#import_questions").css("display", "inline-block");
+    $("#start_game").css("display", "inline-block");
     
     $("#room_code").html(room_code);
     socket.emit('start_game', { gm_name: "Cookie Masterson", room_code: room_code});
