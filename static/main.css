@@ -64,4 +64,13 @@ input#lock_answer:disabled {
     min-height: 200px;
 }
 
+.question_here {
+    font-size: 1.5em;
+    margin-top:10px;
+}
+.answer_here {
+    color: goldenrod;
+    font-size: 2em;
+    margin-bottom: 10px;
+}
 

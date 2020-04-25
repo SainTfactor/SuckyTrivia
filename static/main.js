@@ -46,6 +46,9 @@ join_game_player = function(socket, username, room, guid) {
 
 join_game_owner = function(socket, room_code) {
     $("#leave_game").css("display", "block");
+    $("#import_questions").css("display", "block");
+    $("#start_game").css("display", "block");
+    
     $("#room_code").html(room_code);
     socket.emit('start_game', { gm_name: "Cookie Masterson", room_code: room_code});
     show_screen("gm_screen");
@@ -74,6 +77,7 @@ join_game_owner = function(socket, room_code) {
         var self = this;
 
         self.players = ko.observableArray([]);
+        self.current_question = -1;
 
         socket.on("player_join", function(data, cb){
             if(!self.players().some(function(val) { return data.name == val.name; })){
@@ -81,26 +85,46 @@ join_game_owner = function(socket, room_code) {
             }
         });
         
+        send_question = function() {
+            if (self.current_question != -1 && self.current_question < self.questions().length) {
+                socket.emit("send_question", self.questions()[self.current_question].question)
+            }
+        }
+        send_answer = function() {
+            socket.emit("send_answer", self.questions()[self.current_question].answer)
+        }
+        
+        $("#start_game").on("click", function(){
+            if (self.questions().length != 0) {
+                $("#import_questions").css("display", "none");
+                $("#start_game").css("display", "none");
+                self.current_question = 0;
+                send_question();
+            } else {
+                alert("Can't start the game without questions, silly.")
+            }
+        });
+        
         self.questions = ko.observableArray([]);
         timeout = null;
         process_questions = function() {
-           self.questions.removeAll()
-           raw_data = $("#question_input_box").val()
-           q_arry = raw_data.split("\n\n")
-           q_arry.forEach(function(val){
-               part_arry = val.split("\n")
-               a_question = { question: "<Missing Question>", answer: "<Missing Answer>", points: 0 }
-               if (part_arry[0] != undefined) {
-                   a_question.question = part_arry[0]
-               }
-               if (part_arry[1] != undefined) {
-                   a_question.answer = part_arry[1]
-               }
-               if (part_arry[2] != undefined) {
-                   a_question.points = parseInt(part_arry[2].replace(/\D/g,''))
-               }
-               self.questions.push(a_question)
-           });
+            self.questions.removeAll()
+            raw_data = $("#question_input_box").val()
+            q_arry = raw_data.split("\n\n")
+            q_arry.forEach(function(val){
+                part_arry = val.split("\n")
+                a_question = { question: "<Missing Question>", answer: "<Missing Answer>", points: 0 }
+                if (part_arry[0] != undefined) {
+                    a_question.question = part_arry[0]
+                }
+                if (part_arry[1] != undefined) {
+                    a_question.answer = part_arry[1]
+                }
+                if (part_arry[2] != undefined) {
+                    a_question.points = parseInt(part_arry[2].replace(/\D/g,''))
+                }
+                self.questions.push(a_question)
+            });
         }
         $("#question_input_box").on("keyup", function() {
             clearTimeout(timeout);
@@ -131,6 +155,14 @@ $(document).ready(function() {
             join_game_player(socket, data.username, data.room, data.guid)
         }
     });
+    
+    socket.on("receive_question", function(data, cb) {
+        $("#question_here").html(data);
+        $("#answer_here").html("");
+    });
+    socket.on("receive_answer", function(data, cb) {
+        $("#answer_here").html(data);
+    });
 
     $("#new_btn").on("click", function(){
         room_code = gen_room_code();
@@ -148,6 +180,8 @@ $(document).ready(function() {
     $('#leave_game').on("click", function() {
         socket.emit("leave")
         $("#leave_game").css("display", "none");
+        $("#import_questions").css("display", "none");
+        $("#start_game").css("display", "none");
         show_screen("start_screen")
     });
     

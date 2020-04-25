@@ -20,6 +20,10 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="#"><img src="http://saintfactorstudios.ml/SainTfactorStudiosIP/WingedTTransparent.png" alt="Winged T" height="40" width="40"></a>
     <div class="collapse navbar-collapse">
+      <span class="nav navbar-text mr-auto">
+        <input id="import_questions" class="btn btn-sm warning warning_link_outline" style="display:none;" type="button" value="Import Questions" />
+        <input id="start_game" class="btn btn-sm warning warning_link_outline" style="display:none;" type="button" value="Start Game" />
+      </span>
       <span class="nav navbar-text ml-auto">
         <a href="#" id="leave_game" class="btn btn-warning warning_link_outline btn-sm" role="button" style="display:none;">Leave Game</a>
       </span>
@@ -41,10 +45,13 @@
       <div id="gm_screen" style="display:none;" class="game_screen">
         <h1>Welcome to your game!</h1>
         <h2>Game Code: <span id="room_code" style="font-weight:bold;"></span></h2>
-        <div id="controls">
-          <input id="import_questions" class="btn btn-sm btn-primary" type="button" value="Import Questions" />
+        <div class="question_here"></div>
+        <div class="answer_here"></div>
+        <div id="controls">          
+          <input id="previous_question" class="btn btn-sm btn-primary" type="button" value="Previous" />
           <input id="lock_all_answers" class="btn btn-sm btn-primary" type="button" value="Lock all Answers" />
           <input id="show_answer" class="btn btn-sm btn-primary" type="button" value="Show Answer" />
+          <input id="next_question" class="btn btn-sm btn-primary" type="button" value="Next" />
         </div>
         <div data-bind="foreach: players" class="row">
           <div class="col-12 col-sm-6 col-md-4 col-lg-3 box_wrapper">
@@ -99,7 +106,8 @@
       <!-- Player Main Screen -->
       <div id="player_game_screen" style="display:none;" class="game_screen">
         <h1>Sucky trivia</h1>
-        <div id="question_posed"></div>
+        <div class="question_here"></div>
+        <div class="answer_here"></div>
         <input id="answer_input" class="form-control" type="text" placeholder="Type your answers here." />
         <input id="lock_answer" class="btn btn-lg btn-primary" type="button" value="Lock in Answer" />
       </div>

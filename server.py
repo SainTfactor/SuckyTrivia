@@ -78,6 +78,16 @@ def lock(data):
     else:
         emit("lock", room=session["room"])
     
+@socketio.on('send_question', namespace='/socket_space')
+def send_question(data):    
+    emit("receive_question", data, room=session["room"])
+    emit("receive_question", data, room="gm-{}".format(session["room"]))
+    
+@socketio.on('send_answer', namespace='/socket_space')
+def send_question(data):    
+    emit("receive_answer", data, room=session["room"])
+    emit("receive_answer", data, room="gm-{}".format(session["room"]))
+    
 @socketio.on('connect', namespace='/socket_space')
 def connect():
     emit('my response', {'data': 'Connected'})
