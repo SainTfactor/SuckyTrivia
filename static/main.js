@@ -106,6 +106,10 @@ join_game_owner = function(socket, room_code) {
             }
         });
         
+        $("#show_answer").on("click", function(){
+            send_answer();
+        });
+        
         self.questions = ko.observableArray([]);
         timeout = null;
         process_questions = function() {
@@ -158,10 +162,12 @@ $(document).ready(function() {
     });
     
     socket.on("receive_question", function(data, cb) {
+        console.log("A question!  A question!")
         $("#question_here").html(data);
         $("#answer_here").html("");
     });
     socket.on("receive_answer", function(data, cb) {
+        console.log("Itsa da ansa!!")
         $("#answer_here").html(data);
     });
 
