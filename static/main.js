@@ -87,6 +87,7 @@ join_game_owner = function(socket, room_code) {
         
         send_question = function() {
             if (self.current_question != -1 && self.current_question < self.questions().length) {
+                console.log(self.questions()[self.current_question])
                 socket.emit("send_question", self.questions()[self.current_question].question)
             }
         }
@@ -163,6 +164,7 @@ $(document).ready(function() {
     
     socket.on("receive_question", function(data, cb) {
         console.log("A question!  A question!")
+        console.log(data)
         $("#question_here").html(data);
         $("#answer_here").html("");
     });

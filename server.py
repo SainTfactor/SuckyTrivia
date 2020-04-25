@@ -81,6 +81,7 @@ def lock(data):
 @socketio.on('send_question', namespace='/socket_space')
 def send_question(data):   
     print("I got to the place!")
+    print(data)
     emit("receive_question", data, room=session["room"])
     emit("receive_question", data, room="gm-{}".format(session["room"]))
     
