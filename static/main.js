@@ -110,7 +110,7 @@ join_game_owner = function(socket, room_code) {
             send_answer();
         });
      
-        $("#previous_question").on("", function() {
+        $("#previous_question").on("click", function() {
             if(self.current_question > 0) {
                 self.current_question--;
                 send_question();
@@ -120,7 +120,7 @@ join_game_owner = function(socket, room_code) {
             }
             $("#next_question").prop("disabled", false);
         });
-        $("#next_question").on("", function() {            
+        $("#next_question").on("click", function() {            
             if(self.current_question < self.questions().length - 1) {
                 self.current_question++;
                 send_question();
