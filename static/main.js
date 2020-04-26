@@ -109,6 +109,27 @@ join_game_owner = function(socket, room_code) {
         $("#show_answer").on("click", function(){
             send_answer();
         });
+     
+        $("#previous_question").on("", function() {
+            if(self.current_question > 0) {
+                self.current_question--;
+                send_question();
+            }
+            if(self.current_question == 0) {
+                $("#previous_question").prop("disabled", true);
+            }
+            $("#next_question").prop("disabled", false);
+        });
+        $("#next_question").on("", function() {            
+            if(self.current_question < self.questions().length - 1) {
+                self.current_question++;
+                send_question();
+            }
+            if(self.current_question == self.questions().length - 1) {
+                $("#next_question").prop("disabled", true);
+            }
+            $("#previous_question").prop("disabled", false);
+        }); 
         
         self.questions = ko.observableArray([]);
         timeout = null;
