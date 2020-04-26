@@ -11,7 +11,7 @@
   font-weight: bold;
   border: 1.5px solid #eea236;
 }
-.warning_link_outline:hover {
+.warning_link_outline:hover, .warning_link_outline:active, .warning_link_outline:focus {
   color: #5356b5;
   background-color: #eea236;
   border-color: #eea236;
