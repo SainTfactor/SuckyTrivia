@@ -11,6 +11,11 @@
   font-weight: bold;
   border: 1.5px solid #eea236;
 }
+.warning_link_outline:hover {
+  color: #5356b5;
+  background-color: #eea236;
+  border-color: #eea236;
+}
 
 .input-group-text {
   min-width: 115px;
