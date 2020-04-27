@@ -48,17 +48,17 @@
         <div class="question_here"></div>
         <div class="answer_here"></div>
         <div id="controls" style="display:none;">          
-          <input id="previous_question" disabled class="btn btn-sm btn-primary" type="button" value="Previous" />
+          <input id="previous_question" data-bind="disable: current_question() == 0" class="btn btn-sm btn-primary" type="button" value="Previous" />
           <input id="lock_all_answers" class="btn btn-sm btn-primary" type="button" value="Lock all Answers" />
-          <input id="show_answer" class="btn btn-sm btn-primary" type="button" value="Show Answer" />
-          <input id="next_question" class="btn btn-sm btn-primary" type="button" value="Next" />
+          <input id="show_answer" data-bind="disable: current_question() == -1 || questions()[current_question()].answer_shown" class="btn btn-sm btn-primary" type="button" value="Show Answer" />
+          <input id="next_question" data-bind="disable: current_question() == questions().length - 1" class="btn btn-sm btn-primary" type="button" value="Next" />
         </div>
         <div data-bind="foreach: players" class="row">
           <div class="col-12 col-sm-6 col-md-4 col-lg-3 box_wrapper">
             <div class="user-box">
               <h4 data-bind="text: name"></h4>
-              <div data-bind="attr: { id: guid }"></div>
-              <div data-bind="attr: { guid: guid }" style="display:none;margin-top:10px;">
+              <div class="player_answer" data-bind="attr: { id: guid }"></div>
+              <div class="player_answer_lock" data-bind="attr: { guid: guid }" style="display:none;margin-top:10px;">
                   <i class="fas fa-lock" style="cursor:pointer"></i>
               </div>
             </div>

@@ -77,7 +77,7 @@ join_game_owner = function(socket, room_code) {
         var self = this;
 
         self.players = ko.observableArray([]);
-        self.current_question = -1;
+        self.current_question = ko.observable(-1);
 
         socket.on("player_join", function(data, cb){
             if(!self.players().some(function(val) { return data.name == val.name; })){
@@ -86,20 +86,28 @@ join_game_owner = function(socket, room_code) {
         });
         
         send_question = function() {
-            if (self.current_question != -1 && self.current_question < self.questions().length) {
-                socket.emit("send_question", self.questions()[self.current_question].question)
+            if (self.current_question() != -1 && self.current_question() < self.questions().length) {
+		current = self.questions()[self.current_question()];
+                socket.emit("send_question", current.question + " <small>(" + current.points + "pts)</small>")
             }
         }
         send_answer = function() {
-            socket.emit("send_answer", self.questions()[self.current_question].answer)
+            socket.emit("send_answer", self.questions()[self.current_question()].answer)
         }
+	commit_answers = function() {
+	    current = self.questions()[self.current_question()];
+	    $(".player_answer").each(function(i,val){
+		got_it = current.answer.replace(/(\W)/g, "").toLowerCase() == $(val).html().replace(/(\W)/g, "").toLowerCase();
+	        current.player_answers.push({ player: $(val).prop("id"), answer: $(val).html(), points: got_it ? current.points : 0 })
+	    });
+	}
         
         $("#start_game").on("click", function(){
             if (self.questions().length != 0) {
                 $("#import_questions").css("display", "none");
                 $("#start_game").css("display", "none");
                 $("#controls").css("display", "block");
-                self.current_question = 0;
+                self.current_question(0);
                 send_question();
             } else {
                 alert("Can't start the game without questions, silly.")
@@ -107,28 +115,36 @@ join_game_owner = function(socket, room_code) {
         });
         
         $("#show_answer").on("click", function(){
-            send_answer();
+            $("#show_answer").prop("disabled", true);
+            self.questions()[self.current_question()].answer_shown = true;
+            socket.emit("lock", {});		
+	    commit_answers();
+	    send_answer();
         });
      
         $("#previous_question").on("click", function() {
-            if(self.current_question > 0) {
-                self.current_question--;
+            if(self.current_question() > 0) {
+                self.current_question(self.current_question() - 1);
                 send_question();
             }
-            if(self.current_question == 0) {
-                $("#previous_question").prop("disabled", true);
-            }
-            $("#next_question").prop("disabled", false);
+	    if(self.questions()[self.current_question()].answer_shown) {
+	        send_answer();
+	    }
+	    $(".player_answer").each(function(i, val) { $(val).html(""); });
+            $(".player_answer_lock").each(function(i, val) { $(val).css("display", "none"); });
+	    socket.emit("unlock", {});
         });
         $("#next_question").on("click", function() {            
-            if(self.current_question < self.questions().length - 1) {
-                self.current_question++;
+            if(self.current_question() < self.questions().length - 1) {
+                self.current_question(self.current_question() + 1);
                 send_question();
             }
-            if(self.current_question == self.questions().length - 1) {
-                $("#next_question").prop("disabled", true);
-            }
-            $("#previous_question").prop("disabled", false);
+	    if(self.questions()[self.current_question()].answer_shown) {
+                send_answer();
+	    }
+	    $(".player_answer").each(function(i, val) { $(val).html(""); });
+            $(".player_answer_lock").each(function(i, val) { $(val).css("display", "none"); });
+            socket.emit("unlock", {});
         }); 
         
         self.questions = ko.observableArray([]);
@@ -139,7 +155,7 @@ join_game_owner = function(socket, room_code) {
             q_arry = raw_data.split("\n\n")
             q_arry.forEach(function(val){
                 part_arry = val.split("\n")
-                a_question = { question: "<Missing Question>", answer: "<Missing Answer>", points: 0 }
+                a_question = { question: "<Missing Question>", answer: "<Missing Answer>", points: 0, answer_shown: false, player_answers: [] }
                 if (part_arry[0] != undefined) {
                     a_question.question = part_arry[0]
                 }
