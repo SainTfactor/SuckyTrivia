@@ -3,6 +3,7 @@ gen_room_code = function() {
 }
 
 show_screen = function(screen_name) {
+    console.log(screen_name);
     $(".game_screen").css("display", "none");
     $("#" + screen_name).css("display", "block");
 }
@@ -54,12 +55,12 @@ join_game_owner = function(socket, room_code) {
     show_screen("gm_screen");
      
     socket.on("answer_locked", function(data, cb) {
-        $("[guid=" + data.guid + "]").css("display", "block");
-        $("[guid=" + data.guid + "]").on("click", function(){
+        $(".player_answer_lock[guid=" + data.guid + "]").css("display", "block");
+        $(".player_answer_lock[guid=" + data.guid + "]").on("click", function(){
             socket.emit("unlock", { guid: data.guid })
             $("#" + data.guid).html("")
             $("[guid=" + data.guid + "]").css("display", "none");
-        })
+        });
     });   
     
     $("#import_questions").on("click", function() {
@@ -76,6 +77,7 @@ join_game_owner = function(socket, room_code) {
     function GameViewModel() {
         var self = this;
 
+        self.questions = ko.observableArray([]);
         self.players = ko.observableArray([]);
         self.current_question = ko.observable(-1);
 
@@ -83,15 +85,27 @@ join_game_owner = function(socket, room_code) {
             if(!self.players().some(function(val) { return data.name == val.name; })){
                 self.players.push(data);
             }
+	    if(self.current_question() != -1) {
+	        send_question();
+	        if(self.questions()[self.current_question()].answer_shown) {
+	            send_answer();
+	        }
+            }
         });
         
         send_question = function() {
+	    $(".player_answer_points").each(function(i,val){ $(val).css("display", "none") });
             if (self.current_question() != -1 && self.current_question() < self.questions().length) {
 		current = self.questions()[self.current_question()];
                 socket.emit("send_question", current.question + " <small>(" + current.points + "pts)</small>")
             }
         }
         send_answer = function() {
+	    $(".player_answer_points").each(function(i,val){
+                pap = self.questions()[self.current_question()].player_answers.filter(function(val2){ return val2.player == $(val).attr("guid") })[0]
+		$(val).html(pap ? pap.points : 0); 
+                $(val).css("display", "inline-block");	
+	    });
             socket.emit("send_answer", self.questions()[self.current_question()].answer)
         }
 	commit_answers = function() {
@@ -121,6 +135,19 @@ join_game_owner = function(socket, room_code) {
 	    commit_answers();
 	    send_answer();
         });
+
+	$("#player_info_area").on("click", ".player_answer_points", function(event) {
+            if($("#points-edit_"+$(event.target).prop("guid")).length == 0) {
+	       node = $(event.target);
+	       node.html("<input id='points-edit_"+node.prop("guid")+"' class='form-control' style='width:3em;' type='text' value='"+node.html()+"' />");
+               $("#points-edit_"+node.prop("guid")).focus();
+	       $("#points-edit_"+node.prop("guid")).on("blur", function() {
+                   number = parseInt($("#points-edit_"+node.prop("guid")).val().replace(/(\D)/g, ""));
+                   self.questions()[self.current_question()].player_answers.filter(function(val){ return val.player == node.attr("guid") })[0].points = number;
+	           node.html(number);
+	       });
+	    }
+	});
      
         $("#previous_question").on("click", function() {
             if(self.current_question() > 0) {
@@ -129,10 +156,18 @@ join_game_owner = function(socket, room_code) {
             }
 	    if(self.questions()[self.current_question()].answer_shown) {
 	        send_answer();
+	        $(".player_answer").each(function(i, val) {
+		    pa = self.questions()[self.current_question()].player_answers.filter(function(val2){ return val2.player == $(val).prop("id") })[0]
+		    answer = pa ? pa.answer : "[[Didn't Answer]]";
+		    $(val).html(answer); 
+		});
+		socket.emit("lock", {})
+
+	    } else {
+	        $(".player_answer").each(function(i, val) { $(val).html(""); });
+                $(".player_answer_lock").each(function(i, val) { $(val).css("display", "none"); });
+	        socket.emit("unlock", {});
 	    }
-	    $(".player_answer").each(function(i, val) { $(val).html(""); });
-            $(".player_answer_lock").each(function(i, val) { $(val).css("display", "none"); });
-	    socket.emit("unlock", {});
         });
         $("#next_question").on("click", function() {            
             if(self.current_question() < self.questions().length - 1) {
@@ -141,13 +176,19 @@ join_game_owner = function(socket, room_code) {
             }
 	    if(self.questions()[self.current_question()].answer_shown) {
                 send_answer();
+	        $(".player_answer").each(function(i, val) {
+		    pa = self.questions()[self.current_question()].player_answers.filter(function(val2){ return val2.player == $(val).prop("id") })[0]
+		    answer = pa ? pa.answer : "[[Didn't Answer]]";
+		    $(val).html(answer); 
+		});
+		socket.emit("lock", {})
+	    } else {
+	        $(".player_answer").each(function(i, val) { $(val).html(""); });
+                $(".player_answer_lock").each(function(i, val) { $(val).css("display", "none"); });
+                socket.emit("unlock", {});
 	    }
-	    $(".player_answer").each(function(i, val) { $(val).html(""); });
-            $(".player_answer_lock").each(function(i, val) { $(val).css("display", "none"); });
-            socket.emit("unlock", {});
         }); 
         
-        self.questions = ko.observableArray([]);
         timeout = null;
         process_questions = function() {
             self.questions.removeAll()

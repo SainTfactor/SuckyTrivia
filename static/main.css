@@ -48,6 +48,17 @@ input#lock_answer:disabled {
     overflow:hidden
 }
 
+.player_answer_points {
+    position: absolute;
+    margin: 5px 15px;
+    font-size: 25px;
+    right: 15px;
+    bottom: 0;
+    color: goldenrod;
+    font-weight: bold;
+    cursor: pointer;   
+}
+
 .box_wrapper {
     margin-top: 15px;
     margin-bottom: 15px;

@@ -49,14 +49,15 @@
         <div class="answer_here"></div>
         <div id="controls" style="display:none;">          
           <input id="previous_question" data-bind="disable: current_question() == 0" class="btn btn-sm btn-primary" type="button" value="Previous" />
-          <input id="lock_all_answers" class="btn btn-sm btn-primary" type="button" value="Lock all Answers" />
+	  <input id="lock_all_answers" class="btn btn-sm btn-primary" type="button" value="Lock all Answers" />
           <input id="show_answer" data-bind="disable: current_question() == -1 || questions()[current_question()].answer_shown" class="btn btn-sm btn-primary" type="button" value="Show Answer" />
           <input id="next_question" data-bind="disable: current_question() == questions().length - 1" class="btn btn-sm btn-primary" type="button" value="Next" />
         </div>
-        <div data-bind="foreach: players" class="row">
+        <div id="player_info_area" data-bind="foreach: players" class="row">
           <div class="col-12 col-sm-6 col-md-4 col-lg-3 box_wrapper">
             <div class="user-box">
               <h4 data-bind="text: name"></h4>
+	      <div class="player_answer_points" data-bind="attr: { guid: guid }" style="display:none;"></div>
               <div class="player_answer" data-bind="attr: { id: guid }"></div>
               <div class="player_answer_lock" data-bind="attr: { guid: guid }" style="display:none;margin-top:10px;">
                   <i class="fas fa-lock" style="cursor:pointer"></i>
@@ -78,7 +79,7 @@
               <div data-bind="foreach: questions" class="row preview_area">
                   <div class="col-12 col-lg-6 box_wrapper">
                     <div class="question-box">
-                      <h5><span data-bind="text: question"></span><small> (<span data-bind="text: points"></span>pts.</small>)</h5>                    
+                      <h5><span data-bind="text: question"></span><small> (<span data-bind="text: points"></span>pts.</small>)</h5>            
                       <div data-bind="text: answer"></div>
                     </div>
                   </div>
