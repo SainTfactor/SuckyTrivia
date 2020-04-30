@@ -2,7 +2,6 @@ var gen_room_code = function () {
     return Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 5).toUpperCase();
 };
 var show_screen = function (screen_name) {
-    console.log(screen_name);
     $('.game_screen').css('display', 'none');
     $('#' + screen_name).css('display', 'block');
 };
@@ -85,7 +84,7 @@ var join_game_owner = function (socket, room_code) {
             });            
             leaderboard.map(function(i,val){  
                 val.score = self.questions()
-                    .map(function(i,val){ return player_answers })
+                    .map(function(i,val){ return val.player_answers })
                     .filter(function (val2) { return val2.player == val.guid })
                     .reduce(function(acc, cur){ return acc + cur.points });
                 return val;
