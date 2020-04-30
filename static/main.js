@@ -111,12 +111,13 @@ var join_game_owner = function (socket, room_code) {
                 $(val).html(pap ? pap.points : 0);
                 $(val).css('display', 'inline-block');
             });
-            socket.emit('send_answer', self.questions()[self.current_question()].answer);
+            var current_question = self.questions()[self.current_question()]
+            socket.emit('send_answer', "Answer" + (current_question.indexOf("|") == -1 ? "" : "s") + ": " + current_question.answer.split("|").join(", "));
         };
         var commit_answers = function () {
             current = self.questions()[self.current_question()];
             $('.player_answer').each(function (i, val) {
-                got_it = current.answer.replace(/(\W)/g, '').toLowerCase() == $(val).html().replace(/(\W)/g, '').toLowerCase();
+                got_it = current.answer.split("|").map(function(val){ return val.replace(/(\W)/g, '').toLowerCase() }).includes($(val).html().replace(/(\W)/g, '').toLowerCase())
                 current.player_answers.push({
                     player: $(val).prop('id'),
                     answer: $(val).html(),
@@ -275,6 +276,7 @@ var join_game_owner = function (socket, room_code) {
             self.current_question(-1);
             process_questions();
             show_screen('gm_screen');
+            socket.emit('unlock', {});
         });
         $('#question_input_box').on('keyup', function () {
             clearTimeout(timeout);
