@@ -174,6 +174,8 @@ var join_game_owner = function (socket, room_code) {
                 $('.in_game').css('display', 'inline-block');
                 $('#controls').css('display', 'block');
                 self.current_question(0);
+                show_screen('gm_screen');
+                socket.emit('unlock', {});
                 send_question();
             } else {
                 alert("Can't start the game without questions, silly.");
@@ -270,8 +272,8 @@ var join_game_owner = function (socket, room_code) {
             $('.in_game').css('display', 'none');
             $('#controls').css('display', 'none');
             socket.emit('send_question', "");
-            process_questions();
             self.current_question(-1);
+            process_questions();
             show_screen('gm_screen');
         });
         $('#question_input_box').on('keyup', function () {
