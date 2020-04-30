@@ -84,7 +84,10 @@ var join_game_owner = function (socket, room_code) {
                 return { place: 0, player_name: val.name, guid: val.guid, score: 0 }
             });            
             leaderboard.map(function(i,val){  
-                val.score = self.questions().player_answers.filter(function (val2) { return val2.player == val.guid }).reduce(function(acc, cur){ return acc + cur.points });
+                val.score = self.questions()
+                    .map(function(i,val){ return player_answers })
+                    .filter(function (val2) { return val2.player == val.guid })
+                    .reduce(function(acc, cur){ return acc + cur.points });
                 return val;
             }).sort(function(a,b){ return a.score - b.score });
             leaderboard.map(function(i,val){ val.place = i+1; return val; });
