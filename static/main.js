@@ -185,6 +185,7 @@ var join_game_owner = function (socket, room_code) {
             socket.emit('lock', {});
             commit_answers();
             send_answer();
+            calculate_leaderboard();
             if(self.questions().filter(function(val){ return !val.answer_shown }).length == 0) {
                 $("#finish_game").prop("disabled", false);
             }
