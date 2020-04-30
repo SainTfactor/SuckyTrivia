@@ -78,21 +78,22 @@ var join_game_owner = function (socket, room_code) {
         self.questions = ko.observableArray([]);
         self.players = ko.observableArray([]);
         self.current_question = ko.observable(-1);
-        self.leaderboard = ko.computed(function () {
+        self.leaderboard = ko.observableArray([]);
+        
+        var calculate_leaderboard = function () {
             var leaderboard = self.players().map(function (val) {
                 return { place: 0, player_name: val.name, guid: val.guid, score: 0 }
             });            
             leaderboard.map(function(val){  
                 val.score = self.questions()
-                    .map(function(val2){ console.log(val2.player_answers); return val2.player_answers }).flat()
-                    .filter(function (val3) { console.log(val3); return val3.player == val2.guid })
-                    .reduce(function(acc, cur){ console.log(cur); return acc + cur.points }, 0);
+                    .map(function(val2){ return val2.player_answers }).flat()
+                    .filter(function (val3) { return val3.player == val2.guid })
+                    .reduce(function(acc, cur){ return acc + cur.points }, 0);
                 return val;
             }).sort(function(a,b){ return a.score - b.score });
             leaderboard.map(function(val, i){ val.place = i+1; return val; });
-            return leaderboard;
-        });
-        
+            self.leaderboard(leaderboard);
+        };
         var send_question = function () {
             $('.player_answer_points').each(function (i, val) {
                 $(val).css('display', 'none');
@@ -184,6 +185,9 @@ var join_game_owner = function (socket, room_code) {
             socket.emit('lock', {});
             commit_answers();
             send_answer();
+            if(self.questions().filter(function(val){ return !val.answer_shown }).length == 0) {
+                $("#finish_game").prop("disabled", false);
+            }
         });
         $('#player_info_area').on('click', '.player_answer_points', function (event) {
             var node = $(event.target);
