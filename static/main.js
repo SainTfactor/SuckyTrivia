@@ -82,14 +82,14 @@ var join_game_owner = function (socket, room_code) {
             var leaderboard = self.players().map(function (val) {
                 return { place: 0, player_name: val.name, guid: val.guid, score: 0 }
             });            
-            leaderboard.map(function(i,val){  
+            leaderboard.map(function(val){  
                 val.score = self.questions()
-                    .map(function(i,val){ console.log(i + "-" + val); return val.player_answers })
+                    .map(function(val){ console.log(i + "-" + val); return val.player_answers }).flat()
                     .filter(function (val2) { console.log(val2); return val2.player == val.guid })
                     .reduce(function(acc, cur){ return acc + cur.points }, 0);
                 return val;
             }).sort(function(a,b){ return a.score - b.score });
-            leaderboard.map(function(i,val){ val.place = i+1; return val; });
+            leaderboard.map(function(val){ val.place = i+1; return val; });
             return leaderboard;
         });
         
