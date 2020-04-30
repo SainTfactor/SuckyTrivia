@@ -168,7 +168,7 @@ var join_game_owner = function (socket, room_code) {
         $('#start_game').on('click', function () {
             if (self.questions().length != 0) {
                 $('.pre_game').css('display', 'none');
-                $('.in_game').css('display', 'inline_block');
+                $('.in_game').css('display', 'inline-block');
                 $('#controls').css('display', 'block');
                 self.current_question(0);
                 send_question();
@@ -249,6 +249,9 @@ var join_game_owner = function (socket, room_code) {
         });
         $("#view_scores").on("click", function(){
             show_screen('leaderboard_screen');
+        });
+        $("#score_back").on("click", function(){
+            show_screen('gm_screen');
         });
         $("#show_scores").on("click", function(){
             show_screen('leaderboard_screen');
