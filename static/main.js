@@ -85,7 +85,7 @@ var join_game_owner = function (socket, room_code) {
             leaderboard.map(function(i,val){  
                 val.score = self.questions()
                     .map(function(i,val){ return val.player_answers })
-                    .filter(function (val2) { return val2.player == val.guid })
+                    .filter(function (val2) { console.log(val2); return val2.player == val.guid })
                     .reduce(function(acc, cur){ return acc + cur.points }, 0);
                 return val;
             }).sort(function(a,b){ return a.score - b.score });
