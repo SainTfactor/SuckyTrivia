@@ -111,8 +111,8 @@ var join_game_owner = function (socket, room_code) {
                 $(val).html(pap ? pap.points : 0);
                 $(val).css('display', 'inline-block');
             });
-            var current_question = self.questions()[self.current_question()]
-            socket.emit('send_answer', "Answer" + (current_question.indexOf("|") == -1 ? "" : "s") + ": " + current_question.answer.split("|").join(", "));
+            var answer = self.questions()[self.current_question()].answer;
+            socket.emit('send_answer', "Answer" + (answer.indexOf("|") == -1 ? "" : "s") + ": " + answer.split("|").join(", "));
         };
         var commit_answers = function () {
             current = self.questions()[self.current_question()];
