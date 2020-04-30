@@ -253,6 +253,7 @@ var join_game_owner = function (socket, room_code) {
             show_screen('leaderboard_screen');
         });
         $("#score_back").on("click", function(){
+            send_question();
             show_screen('gm_screen');
         });
         $("#show_scores").on("click", function(){
