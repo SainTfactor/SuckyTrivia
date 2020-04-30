@@ -21,8 +21,10 @@
     <a class="navbar-brand" href="#"><img src="http://saintfactorstudios.ml/SainTfactorStudiosIP/WingedTTransparent.png" alt="Winged T" height="40" width="40"></a>
     <div class="collapse navbar-collapse">
       <span class="nav navbar-text mr-auto">
-        <input id="import_questions" class="btn btn-sm warning_link_outline" style="display:none;" type="button" value="Import Questions" />
-        <input id="start_game" class="btn btn-sm warning_link_outline" style="display:none;" type="button" value="Start Game" />
+        <input id="import_questions" class="btn btn-sm warning_link_outline pre_game" style="display:none;" type="button" value="Import Questions" />
+        <input id="start_game" class="btn btn-sm warning_link_outline pre_game" style="display:none;" type="button" value="Start Game" />
+        <input id="view_scores" class="btn btn-sm warning_link_outline in_game" style="display:none;" type="button" value="View Scores" />
+        <input id="show_scores" class="btn btn-sm warning_link_outline in_game" style="display:none;" type="button" value="Share Scores" />
       </span>
       <span class="nav navbar-text ml-auto">
         <a href="#" id="leave_game" class="btn btn-sm warning_link_outline" role="button" style="display:none;">Leave Game</a>
@@ -86,6 +88,28 @@
               </div>
             </div>
         </div>
+      </div>
+      <!-- Leaderboard Screen -->
+      <div id="leaderboard_screen" style="display:none;" class="game_screen">
+        <h1 id="leaderboard_title">Current Scores</h1>
+        <table id="score_table" class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">User</th>
+              <th scope="col">Score</th>
+            </tr>
+          </thead>
+          <tbody data-bind="foreach: leaderboard">
+            <tr>
+              <th scope="row" data-bind="text: place"></th>
+              <td data-bind="text: player_name"></td>
+              <td data-bind="text: score"></td>
+            </tr>
+            </tr>
+          </tbody>
+        </table>
+        <input id="finish_game" class="btn btn-lg btn-primary" data-bind="enable: questions().filter(function(val){ return !val.answer_shown }).length == 0" type="button" value="Finish Game" />
       </div>
       <!-- Player Join Room Screen -->
       <div id="player_connect_screen" style="display:none;" class="game_screen">
