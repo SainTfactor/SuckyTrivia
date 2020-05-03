@@ -188,7 +188,6 @@ var join_game_owner = function (socket, room_code) {
             socket.emit('lock', {});
             commit_answers();
             send_answer();
-            calculate_leaderboard();
             if(self.questions().filter(function(val){ return !val.answer_shown }).length == 0) {
                 $("#finish_game").prop("disabled", false);
             }
@@ -258,6 +257,7 @@ var join_game_owner = function (socket, room_code) {
             }
         });
         $("#view_scores").on("click", function(){
+            calculate_leaderboard();
             show_screen('leaderboard_screen');
         });
         $("#score_back").on("click", function(){
@@ -265,6 +265,7 @@ var join_game_owner = function (socket, room_code) {
             show_screen('gm_screen');
         });
         $("#show_scores").on("click", function(){
+            calculate_leaderboard();
             show_screen('leaderboard_screen');
             socket.emit('send_question', $("#score_table")[0].outerHTML);
         });
