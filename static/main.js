@@ -90,7 +90,7 @@ var join_game_owner = function (socket, room_code) {
                     .filter(function (val2) { return val2.player == val.guid })
                     .reduce(function(acc, cur){ return acc + (cur.points == "" ? 0 : cur.points) }, 0);
                 return val;
-            }).sort(function(a,b){ return a.score - b.score; });
+            }).sort(function(a,b){ return b.score - a.score; });
             console.log(leaderboard);
             leaderboard.map(function(val, i){ val.place = i+1; return val; });
             self.leaderboard(leaderboard);
