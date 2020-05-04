@@ -142,19 +142,17 @@ var join_game_owner = function (socket, room_code) {
                 };
                 if (part_arry[0] != undefined) {
                     a_question.question = part_arry[0];
-                    if (a_question.question[0] == "[")
-                    {
-                        a_question.answer = ""
-                        a_question.points = ""
-                        self.questions.push(a_question);
-                        break;
+                }
+                if (a_question.question[0] == "[") {
+                    a_question.answer = ""
+                    a_question.points = ""
+                } else {
+                    if (part_arry[1] != undefined) {
+                        a_question.answer = part_arry[1];
                     }
-                }
-                if (part_arry[1] != undefined) {
-                    a_question.answer = part_arry[1];
-                }
-                if (part_arry[2] != undefined) {
-                    a_question.points = parseInt(part_arry[2].replace(/\D/g, ''));
+                    if (part_arry[2] != undefined) {
+                        a_question.points = parseInt(part_arry[2].replace(/\D/g, ''));
+                    }
                 }
                 self.questions.push(a_question);
             });
