@@ -84,7 +84,7 @@ var join_game_owner = function (socket, room_code) {
             var leaderboard = self.players().map(function (val) {
                 return { place: 0, player_name: val.name, guid: val.guid, score: 0 }
             });            
-            leaderboard.map(function(val){  
+            leaderboard = leaderboard.map(function(val){  
                 val.score = self.questions()
                     .map(function(val2){ return val2.player_answers }).flat()
                     .filter(function (val2) { return val2.player == val.guid })
