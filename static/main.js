@@ -147,7 +147,7 @@ var join_game_owner = function (socket, room_code) {
                     a_question.question = a_question.question.substr(1, a_question.question.length -2);
                     a_question.answer = "";
                     a_question.points = "";
-                    answer_shown = true;
+                    a_question.answer_shown = true;
                 } else {
                     if (part_arry[1] != undefined) {
                         a_question.answer = part_arry[1];
@@ -192,6 +192,7 @@ var join_game_owner = function (socket, room_code) {
         });
         $('#show_answer').on('click', function () {
             $('#show_answer').prop('disabled', true);
+            $('#lock_all_answers').prop('disabled', true);
             self.questions()[self.current_question()].answer_shown = true;
             socket.emit('lock', {});
             commit_answers();
