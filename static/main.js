@@ -271,6 +271,9 @@ var join_game_owner = function (socket, room_code) {
         });
         $("#score_back").on("click", function(){
             send_question();
+            if (self.questions()[self.current_question()].answer_shown) {
+                send_answer();
+            }
             show_screen('gm_screen');
         });
         $("#show_scores").on("click", function(){
