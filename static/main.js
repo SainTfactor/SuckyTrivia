@@ -138,6 +138,7 @@ var join_game_owner = function (socket, room_code) {
                     answer: '<Missing Answer>',
                     points: 0,
                     answer_shown: false,
+                    round_header: false,
                     player_answers: []
                 };
                 if (part_arry[0] != undefined) {
@@ -148,6 +149,7 @@ var join_game_owner = function (socket, room_code) {
                     a_question.answer = "";
                     a_question.points = "";
                     a_question.answer_shown = true;
+                    a_question.round_header = true;
                 } else {
                     if (part_arry[1] != undefined) {
                         a_question.answer = part_arry[1];
@@ -220,7 +222,7 @@ var join_game_owner = function (socket, room_code) {
                 self.current_question(self.current_question() - 1);
                 send_question();
             }
-            if (self.questions()[self.current_question()].answer_shown) {
+            if (self.questions()[self.current_question()].answer_shown && !self.questions()[self.current_question()].round_header) {
                 send_answer();
                 $('.player_answer').each(function (i, val) {
                     var pa = self.questions()[self.current_question()].player_answers.filter(function (val2) {
@@ -245,7 +247,7 @@ var join_game_owner = function (socket, room_code) {
                 self.current_question(self.current_question() + 1);
                 send_question();
             }
-            if (self.questions()[self.current_question()].answer_shown) {
+            if (self.questions()[self.current_question()].answer_shown && !self.questions()[self.current_question()].round_header) {
                 send_answer();
                 $('.player_answer').each(function (i, val) {
                     var pa = self.questions()[self.current_question()].player_answers.filter(function (val2) {
