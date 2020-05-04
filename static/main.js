@@ -91,7 +91,6 @@ var join_game_owner = function (socket, room_code) {
                     .reduce(function(acc, cur){ return acc + (cur.points == "" ? 0 : cur.points) }, 0);
                 return val;
             }).sort(function(a,b){ return b.score - a.score; });
-            console.log(leaderboard);
             leaderboard.map(function(val, i){ val.place = i+1; return val; });
             self.leaderboard(leaderboard);
         };
@@ -289,9 +288,15 @@ var join_game_owner = function (socket, room_code) {
             $('#controls').css('display', 'none');
             show_screen('gm_screen');
             socket.emit('send_question', "");
-            socket.emit('unlock', {});
             self.current_question(-1);
             process_questions();
+            $('.player_answer').each(function (i, val) {
+                $(val).html('');
+            });
+            $('.player_answer_lock').each(function (i, val) {
+                $(val).css('display', 'none');
+            });
+            socket.emit('unlock', {});
         });
         $('#question_input_box').on('keyup', function () {
             clearTimeout(timeout);
