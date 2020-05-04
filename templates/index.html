@@ -51,7 +51,7 @@
         <div class="answer_here"></div>
         <div id="controls" style="display:none;">          
           <input id="previous_question" data-bind="disable: current_question() == 0" class="btn btn-sm btn-primary" type="button" value="Previous" />
-	  <input id="lock_all_answers" class="btn btn-sm btn-primary" type="button" value="Lock all Answers" />
+	      <input id="lock_all_answers" data-bind="disable: current_question() == -1 || questions()[current_question()].answer_shown" class="btn btn-sm btn-primary" type="button" value="Lock all Answers" />
           <input id="show_answer" data-bind="disable: current_question() == -1 || questions()[current_question()].answer_shown" class="btn btn-sm btn-primary" type="button" value="Show Answer" />
           <input id="next_question" data-bind="disable: current_question() == questions().length - 1" class="btn btn-sm btn-primary" type="button" value="Next" />
         </div>
@@ -71,17 +71,22 @@
       <!-- Input questions Screen -->
       <div id="question_input_screen" style="display:none;" class="game_screen">
         <h1>Input your trivia questions!!!</h1>
-        <p>Questions should be input in the format shown below (Question > answer > point value, all on seperate lines, and a blank line between questions).  Multiple correct answers can be separated by the "|" character.</p>
+        <p>Questions should be input in the format shown below (Question > answer > point value, all on seperate lines, and a blank line between questions).  Multiple correct answers can be separated by the "|" character.  Non-question slides should be enclosed in square brackets "[Like this]".</p>
         <div class="row">
             <div class="col-4">
-              <textarea id="question_input_box" class="form-control" rows="18" placeholder="This is my first question?&#10;Yes it is.&#10;5pts&#10;&#10;But is this the THIRD question?&#10;Nope&#10;10&#10;&#10;Name one of the first three prime numbers&#10;2|3|5&#10;7 points"></textarea>
+              <textarea id="question_input_box" class="form-control" rows="18" placeholder="[Round 1: Inane garbage]&#10;&#10;This is my first question?&#10;Yes it is.&#10;5pts&#10;&#10;But is this the THIRD question?&#10;Nope&#10;10&#10;&#10;[Good job guys.  Another question incoming!!]&#10;&#10;Name one of the first three prime numbers&#10;2|3|5&#10;7 points"></textarea>
               <input id="save_questions" class="btn btn-lg btn-primary" type="button" value="Save Questions" />
             </div>
             <div class="col-8">
               <div data-bind="foreach: questions" class="row preview_area">
                   <div class="col-12 col-lg-6 box_wrapper">
                     <div class="question-box">
-                      <h5><span data-bind="text: question"></span><small> (<span data-bind="text: points"></span>pts.</small>)</h5>            
+                      <h5>
+                        <span data-bind="text: question"></span>
+                        <!-- ko if: points != "" -->
+                          <small> (<span data-bind="text: points"></span>pts.</small>)
+                        <!-- /ko -->
+                      </h5>
                       <div data-bind="text: answer"></div>
                     </div>
                   </div>

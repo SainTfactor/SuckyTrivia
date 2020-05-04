@@ -88,9 +88,10 @@ var join_game_owner = function (socket, room_code) {
                 val.score = self.questions()
                     .map(function(val2){ return val2.player_answers }).flat()
                     .filter(function (val2) { return val2.player == val.guid })
-                    .reduce(function(acc, cur){ return acc + cur.points }, 0);
+                    .reduce(function(acc, cur){ return acc + (cur.points == "" ? 0 : cur.points) }, 0);
                 return val;
-            }).sort(function(a,b){ return a.score - b.score });
+            }).sort(function(a,b){ return a.score - b.score; });
+            console.log(leaderboard);
             leaderboard.map(function(val, i){ val.place = i+1; return val; });
             self.leaderboard(leaderboard);
         };
@@ -100,7 +101,7 @@ var join_game_owner = function (socket, room_code) {
             });
             if (self.current_question() != -1 && self.current_question() < self.questions().length) {
                 var current = self.questions()[self.current_question()];
-                socket.emit('send_question', current.question + ' <small>(' + current.points + 'pts)</small>');
+                socket.emit('send_question', current.question + (current.points == "" ? "" : ' <small>(' + current.points + 'pts)</small>'));
             }
         };
         var send_answer = function () {
@@ -141,6 +142,13 @@ var join_game_owner = function (socket, room_code) {
                 };
                 if (part_arry[0] != undefined) {
                     a_question.question = part_arry[0];
+                    if (a_question.question[0] == "[")
+                    {
+                        a_question.answer = ""
+                        a_question.points = ""
+                        self.questions.push(a_question);
+                        break;
+                    }
                 }
                 if (part_arry[1] != undefined) {
                     a_question.answer = part_arry[1];
@@ -273,11 +281,11 @@ var join_game_owner = function (socket, room_code) {
             $('.pre_game').css('display', 'inline-block');
             $('.in_game').css('display', 'none');
             $('#controls').css('display', 'none');
+            show_screen('gm_screen');
             socket.emit('send_question', "");
+            socket.emit('unlock', {});
             self.current_question(-1);
             process_questions();
-            show_screen('gm_screen');
-            socket.emit('unlock', {});
         });
         $('#question_input_box').on('keyup', function () {
             clearTimeout(timeout);
