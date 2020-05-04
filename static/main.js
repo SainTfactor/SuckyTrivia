@@ -144,8 +144,10 @@ var join_game_owner = function (socket, room_code) {
                     a_question.question = part_arry[0];
                 }
                 if (a_question.question[0] == "[") {
-                    a_question.answer = ""
-                    a_question.points = ""
+                    a_question.question = a_question.question.substr(1, a_question.question.length -2);
+                    a_question.answer = "";
+                    a_question.points = "";
+                    answer_shown = true;
                 } else {
                     if (part_arry[1] != undefined) {
                         a_question.answer = part_arry[1];
