@@ -42,10 +42,17 @@ input#lock_answer:disabled {
     border: 2px solid black;
     border-radius: 15px;
     padding: 10px;
+    height: 100%;
     min-height: 135px;
+    display: flex;
+    flex-direction: column;
 }
 .user-box h4 {
     overflow:hidden
+}
+
+.player_answer {
+    margin-bottom: 10px;
 }
 
 .player_answer_points {
@@ -57,6 +64,10 @@ input#lock_answer:disabled {
     color: goldenrod;
     font-weight: bold;
     cursor: pointer;   
+}
+
+.player_answer_lock {
+    margin-top: auto;
 }
 
 .box_wrapper {
@@ -78,6 +89,7 @@ input#lock_answer:disabled {
     border-radius: 5px;
     padding: 10px;
     min-height: 200px;
+    height: 100%;
 }
 
 .question_here {

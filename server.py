@@ -45,6 +45,7 @@ def on_join(data):
 @socketio.on('leave', namespace='/socket_space')
 def on_leave():
     send(session["username"] + ' has left the room.', room=session["room"])
+    emit("free_user", { "guid" : session["guid"] }, room="gm-{}".format(session["room"]))
     leave_room(session["room"])
     session.clear()
     session.modified = True

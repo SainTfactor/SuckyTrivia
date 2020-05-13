@@ -61,7 +61,7 @@
               <h4 data-bind="text: name"></h4>
 	      <div class="player_answer_points" data-bind="attr: { guid: guid }" style="display:none;"></div>
               <div class="player_answer" data-bind="attr: { id: guid }"></div>
-              <div class="player_answer_lock" data-bind="attr: { guid: guid }" style="display:none;margin-top:10px;">
+              <div class="player_answer_lock" data-bind="attr: { guid: guid }" style="display:none;">
                   <i class="fas fa-lock" style="cursor:pointer"></i>
               </div>
             </div>
@@ -70,9 +70,11 @@
       </div>
       <!-- Input questions Screen -->
       <div id="question_input_screen" style="display:none;" class="game_screen">
-        <h1>Input your trivia questions!!!</h1>
-        <p style="font-size:15px;">Questions should be input in the format shown below (Question > answer > point value, all on seperate lines, and a blank line between questions).  Multiple correct answers can be separated by the "|" character.  Non-question slides should be enclosed in square brackets "[Like this]".</p>
-        <div class="row">
+        <h1 style="display: inline-block;">Input your trivia questions!!!</h1>
+        <button type="button" style="margin-bottom:20px;margin-left:20px;" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#game_modal">
+          Help
+	</button>
+	<div class="row">
             <div class="col-4">
               <textarea id="question_input_box" class="form-control" rows="18" placeholder="[Round 1: Inane garbage]&#10;&#10;This is my first question?&#10;Yes it is.&#10;5pts&#10;&#10;But is this the THIRD question?&#10;Nope&#10;10&#10;&#10;[Good job guys.  Another question incoming!!]&#10;&#10;Name one of the first three prime numbers&#10;2|3|5&#10;7 points"></textarea>
               <input id="save_questions" class="btn btn-lg btn-primary" type="button" value="Save Questions" />
@@ -82,7 +84,7 @@
                   <div class="col-12 col-lg-6 box_wrapper">
                     <div class="question-box">
                       <h5>
-                        <span data-bind="text: question"></span>
+                        <span data-bind="html: question"></span>
                         <!-- ko if: points != "" -->
                           <small> (<span data-bind="text: points"></span>pts.</small>)
                         <!-- /ko -->
@@ -147,6 +149,36 @@
   </div>
 </div>
 
+
+<!-- Modal -->
+<div id="game_modal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+		    Questions should be input in the format shown below.
+		</p><p>
+		    (Question > answer > point value, all on seperate lines, and a blank line between questions).  
+		</p><p>
+		    Multiple correct answers can be separated by the "|" character.  
+		</p><p>
+		    Non-question slides should be enclosed in square brackets "[Like this]" (Useful for round title slides).
+		</p><p>
+		    If you want an image included in your question, simply enclose the the url of the image in double square brackets.
+		</p><p>
+		    Ex. [[https://mymodernmet.com/wp/wp-content/uploads/2018/10/Mou-Aysha-portrait-photography-3.jpg]]
+		</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="/static/main.js"></script>
 </body>

@@ -52,18 +52,9 @@ var join_game_owner = function (socket, room_code) {
         gm_name: 'Cookie Masterson',
         room_code: room_code
     });
+   
     show_screen('gm_screen');
-    
-    socket.on('answer_locked', function (data, cb) {
-        $('.player_answer_lock[guid=' + data.guid + ']').css('display', 'block');
-        $('.player_answer_lock[guid=' + data.guid + ']').on('click', function () {
-            socket.emit('unlock', { guid: data.guid });
-            $('#' + data.guid).html('');
-            $('[guid=' + data.guid + ']').css('display', 'none');
-        });
-    });
-    
-    $('#import_questions').on('click', function () {
+       $('#import_questions').on('click', function () {
         show_screen('question_input_screen');
     });
     $('#save_questions').on('click', function () {
@@ -141,7 +132,11 @@ var join_game_owner = function (socket, room_code) {
                     player_answers: []
                 };
                 if (part_arry[0] != undefined) {
-                    a_question.question = part_arry[0];
+                    qst = part_arry[0];
+                    if (qst.indexOf("[[") != -1 && qst.indexOf("]]") != -1) {
+		        qst = qst.replace("[[", "<img style='display:block;width:33%;margin:auto;margin-top:10px;' src='").replace("]]", "' />");
+                    }
+                    a_question.question = qst;
                 }
                 if (a_question.question[0] == "[") {
                     a_question.question = a_question.question.substr(1, a_question.question.length -2);
@@ -166,18 +161,55 @@ var join_game_owner = function (socket, room_code) {
                     return data.name == val.name;
                 })) {
                 self.players.push(data);
-            }
+            } else if (self.players().some(function (val) {
+                        return data.name == val.name && val.guid == "";
+                })) {
+                self.players().filter(function (val) { return data.name == val.name && val.guid == ""; })[0].guid = data.guid;
+                $("[guid='dead_user-" + data.name + "']").each(function(i, val){ $(val).attr("guid", data.guid) });
+		$("[id='dead_user-" + data.name + "']").attr("id", data.guid);
+                self.questions().forEach(function(val){
+                    val.player_answers.forEach(function(val2) {
+                        if (val2.player == ("dead_user-" + data.name)) {
+                            val2.player = data.guid; 
+                        }
+                    });
+                });
+	    }
             if (self.current_question() != -1) {
                 send_question();
-                if (self.questions()[self.current_question()].answer_shown) {
+                if (self.questions()[self.current_question()].answer_shown && !self.questions()[self.current_question()].round_header) {
                     send_answer();
                 }
             }
         });
-        socket.on('push_answer', function (data, cb) {
+        socket.on('free_user', function(data, cb) {
+            var player = self.players().filter(function (val) { return data.guid == val.guid})[0];
+	    $("[guid='" + data.guid + "']").each(function(i, val){ $(val).attr("guid", "dead_user-" + player.name) });
+	    $("#" + data.guid).attr("id", "dead_user-" + player.name);
+            self.questions().forEach(function(val){
+                val.player_answers.forEach(function(val2) {
+                    if (val2.player == player.guid) {
+                        val2.player = "dead_user-" + player.name; 
+                    }
+                });
+            });
+	    player.guid = "";
+        });
+	socket.on('push_answer', function (data, cb) {
             $('#' + data.guid).html(data.answer);
         });
-        
+        socket.on('answer_locked', function (data, cb) {
+            $('.player_answer_lock[guid=' + data.guid + ']').css('display', 'block');
+            $('.player_answer_lock[guid=' + data.guid + ']').on('click', function () {
+                if (!self.questions()[self.current_question()].answer_shown) {
+                    socket.emit('unlock', { guid: data.guid });
+                    $('#' + data.guid).html('');
+                    $('[guid=' + data.guid + ']').css('display', 'none');
+                }
+            });
+        });
+    
+     
         $('#start_game').on('click', function () {
             if (self.questions().length != 0) {
                 $('.pre_game').css('display', 'none');
@@ -209,7 +241,8 @@ var join_game_owner = function (socket, room_code) {
                 $('#points-edit_' + node.prop('guid')).focus();
                 $('#points-edit_' + node.prop('guid')).on('blur', function () {
                     var number = parseInt($('#points-edit_' + node.prop('guid')).val().replace(/(\D)/g, ''));
-                    self.questions()[self.current_question()].player_answers.filter(function (val) {
+                    number = isNaN(number) ? 0 : number;
+		    self.questions()[self.current_question()].player_answers.filter(function (val) {
                         return val.player == node.attr('guid');
                     })[0].points = number;
                     node.html(number);
@@ -272,7 +305,7 @@ var join_game_owner = function (socket, room_code) {
         });
         $("#score_back").on("click", function(){
             send_question();
-            if (self.questions()[self.current_question()].answer_shown) {
+            if (self.questions()[self.current_question()].answer_shown && !self.questions()[self.current_question()].round_header) {
                 send_answer();
             }
             show_screen('gm_screen');
