@@ -84,7 +84,7 @@
                   <div class="col-12 col-lg-6 box_wrapper">
                     <div class="question-box">
                       <h5>
-                        <span data-bind="html: question"></span>
+                        <span class="preview_question" data-bind="html: question"></span>
                         <!-- ko if: points != "" -->
                           <small> (<span data-bind="text: points"></span>pts.</small>)
                         <!-- /ko -->
@@ -171,9 +171,13 @@
 		    If you want an image included in your question, simply enclose the the url of the image in double square brackets.
 		</p><p>
 		    Ex. [[https://mymodernmet.com/wp/wp-content/uploads/2018/10/Mou-Aysha-portrait-photography-3.jpg]]
+		</p><p>
+		    If you want to add a song snippet to be included in your question, simply enclose your song title in double curly braces.  Note: this feature is definitely not 100% fleshed out, so make sure all the previews on the right side actually have the song.  Spotify previews are a little hit or miss for some reason.  I think I can improve it, but I'm working on it.
+		</p><p>
+		    Ex. Who sings this song? {{steal my sunshine}}.
 		</p>
-            </div>
-            <div class="modal-footer">
+	    </div>
+	    <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>

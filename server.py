@@ -5,6 +5,7 @@ from flask_cors import CORS
 from functools import wraps
 import uuid
 import datetime
+import requests
 
 app = Flask(__name__)
 SECRET_KEY = "Eff da police, this be temporary."
@@ -78,7 +79,12 @@ def lock(data):
         emit("lock", room=data["guid"])
     else:
         emit("lock", room=session["room"])
-    
+
+@socketio.on("get_spotify_code", namespace='/socket_space')
+def spotify():
+    r = requests.post(url = "https://accounts.spotify.com/api/token", data = { "grant_type" : "client_credentials" } , headers = { "Authorization" : "Basic NWNjZjk2ZDM3MDVjNDIzNThjYzNlODU2N2MwZTIzNDc6ZmU2Yjg0OTdlZmMwNDQ3NzgwOTcyMjU4OGJiOGE3NjM=" })
+    emit("spotify_code", { "data" : r.json() }, room="gm-{}".format(session["room"])) 
+
 @socketio.on('send_question', namespace='/socket_space')
 def send_question(data):   
     emit("receive_question", data, room=session["room"])
