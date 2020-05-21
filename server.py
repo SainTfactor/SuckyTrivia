@@ -25,6 +25,11 @@ def before_request():
 def index():
     return render_template('index.html')
 
+@app.route('/pull_url')
+def pull_url():
+    r = requests.get(url = request.args.get("url"))
+    return r.content
+
 @socketio.on('start_game', namespace='/socket_space')
 def start_game(message):
     session["username"] = message["gm_name"]

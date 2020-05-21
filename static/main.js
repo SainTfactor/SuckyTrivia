@@ -158,19 +158,33 @@ var join_game_owner = function (socket, room_code) {
                             var update_target = index
                             if(resp.ok && resp.status == 200) {
                                 resp.json().then(function(data){ 
-                                    track = data.tracks.items[0].preview_url;
+                                    song = data.tracks.items[0];
+                                    track = song.preview_url;
 				    if(track){
 			                qst = qst.replace(/{{.+}}/g, "<iframe style='display:block;max-width:100%;margin:auto;margin-top:10px;' src='replace_me' />").replace("replace_me", track);
 				    } else {
-				        qst = "!!Could not find " + search_string + "!!";
-				    }
-				    self.questions()[update_target].question = qst;
-				    $($(".preview_question")[update_target]).html(qst);
+                                        $.get("/pull_url", { url: song.external_urls.spotify }, function(data){
+                                            previews = data.match(/https:\/\/p\.scdn\.co[^'"]+/g);
+                                            if(previews.length != 0) {
+						track = previews[previews.length - 1]
+			                        qst = qst.replace(/{{.+}}/g, "<iframe style='display:block;max-width:100%;margin:auto;margin-top:10px;' src='replace_me' />").replace("replace_me", track);
+                                            } else {
+				                qst = "!!Could not find " + search_string + "!!";
+                                            }
+                                            self.questions()[update_target].question = qst;
+                                            $($(".preview_question")[update_target]).html(qst);
+                                        }).fail(function(){
+                                            qst = "Communications error while fetching " + search_string;
+                                            self.questions()[update_target].question = qst;
+                                            $($(".preview_question")[update_target]).html(qst);
+					});
+                                    }
                                 });
                             } else {
-                                self.questions()[update_target].question = "Communications error while fetching " + search_string;
-                                $($(".preview_question")[update_target]).html(qst);
+                                qst = "Communications error while fetching " + search_string;
 			    }
+                            self.questions()[update_target].question = qst;
+                            $($(".preview_question")[update_target]).html(qst);
                         });
                     } else {
 		        a_question.question = qst;
@@ -371,7 +385,7 @@ var join_game_owner = function (socket, room_code) {
         });
         $('#question_input_box').on('keyup', function () {
             clearTimeout(timeout);
-            timeout = setTimeout(process_questions, 300);
+            timeout = setTimeout(process_questions, 1000);
         });
     }
     ko.applyBindings(new GameViewModel());
