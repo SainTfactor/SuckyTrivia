@@ -161,7 +161,7 @@ var join_game_owner = function (socket, room_code) {
                                     song = data.tracks.items[0];
                                     track = song.preview_url;
 				    if(track){
-			                qst = qst.replace(/{{.+}}/g, "<iframe style='display:block;max-width:100%;margin:auto;margin-top:10px;' src='replace_me' />").replace("replace_me", track);
+			                qst = qst.replace(/{{.+}}/g, "<audio controls='' style='display:block;max-width:100%;margin:auto;margin-top:10px;'><source src='replace_me'></source></audio>").replace("replace_me", track);
                                         self.questions()[update_target].question = qst;
                                         $($(".preview_question")[update_target]).html(qst);
 				    } else {
@@ -169,7 +169,7 @@ var join_game_owner = function (socket, room_code) {
                                             previews = data.match(/https:\/\/p\.scdn\.co[^'"]+/g);
                                             if(previews.length != 0) {
 						track = previews[previews.length - 1]
-			                        qst = qst.replace(/{{.+}}/g, "<iframe style='display:block;max-width:100%;margin:auto;margin-top:10px;' src='replace_me' />").replace("replace_me", track);
+			                        qst = qst.replace(/{{.+}}/g, "<audio controls='' style='display:block;max-width:100%;margin:auto;margin-top:10px;'><source src='replace_me'></source></audio>").replace("replace_me", track);
                                             } else {
 				                qst = "!!Could not find " + search_string + "!!";
                                             }
