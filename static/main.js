@@ -162,6 +162,8 @@ var join_game_owner = function (socket, room_code) {
                                     track = song.preview_url;
 				    if(track){
 			                qst = qst.replace(/{{.+}}/g, "<iframe style='display:block;max-width:100%;margin:auto;margin-top:10px;' src='replace_me' />").replace("replace_me", track);
+                                        self.questions()[update_target].question = qst;
+                                        $($(".preview_question")[update_target]).html(qst);
 				    } else {
                                         $.get("/pull_url", { url: song.external_urls.spotify }, function(data){
                                             previews = data.match(/https:\/\/p\.scdn\.co[^'"]+/g);
