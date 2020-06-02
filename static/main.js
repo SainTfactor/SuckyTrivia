@@ -143,7 +143,7 @@ var join_game_owner = function (socket, room_code) {
                 if (part_arry[0] != undefined) {
                     var qst = part_arry[0];
                     if (qst.indexOf("[[") != -1 && qst.indexOf("]]") != -1) {
-		        qst = qst.replace("[[", "<img style='display:block;width:33%;margin:auto;margin-top:10px;' src='").replace("]]", "' />");
+		        qst = qst.replace("[[", "<img style='display:block;max-width:100%;max-height:20em;margin:auto;margin-top:10px;' src='").replace("]]", "' />");
                     }
 		    if (qst.indexOf("{{") != -1 && qst.indexOf("}}") != -1) {
                         a_question.question = "Loading music..."
