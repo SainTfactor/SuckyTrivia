@@ -475,6 +475,7 @@ $(document).ready(function () {
         $('.in_game').css('display', 'none');
         $('#finish_game').css('display', 'none');
         show_screen('start_screen');
+	localStorage.clear();
     });
     $('#lock_answer').on('click', function () {
         lock_answer(socket);
