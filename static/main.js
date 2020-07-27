@@ -79,8 +79,33 @@ var join_game_owner = function (socket, room_code) {
         self.players = ko.observableArray([]);
         self.current_question = ko.observable(-1);
         self.leaderboard = ko.observableArray([]);
-        
-        var calculate_leaderboard = function () {
+
+	var save_state = function () {
+	    localStorage.setItem("questions", JSON.stringify(self.questions()));
+            localStorage.setItem("players", JSON.stringify(self.players()));
+            localStorage.setItem("current_question", JSON.stringify(self.current_question()));
+            localStorage.setItem("leaderboard", JSON.stringify(self.leaderboard()));
+        }
+	var load_state = function () {
+            if(localStorage.getItem("questions")) {
+	      self.questions(JSON.parse(localStorage.getItem("questions")));
+            }
+            if(localStorage.getItem("players")) {
+              self.players(JSON.parse(localStorage.getItem("players")));
+            }
+            if(localStorage.getItem("current_question")) {
+              self.current_question(JSON.parse(localStorage.getItem("current_question")));
+	      if (self.current_question() > 0) {
+	        $(document).ready(function() { start_game(); });
+	      }
+            }
+            if(localStorage.getItem("leaderboard")) {
+              self.leaderboard(JSON.parse(localStorage.getItem("leaderboard")));
+            }
+        }
+        load_state();
+
+	var calculate_leaderboard = function () {
             var leaderboard = self.players().map(function (val) {
                 return { place: 0, player_name: val.name, guid: val.guid, score: 0 }
             });            
@@ -124,7 +149,7 @@ var join_game_owner = function (socket, room_code) {
                     points: got_it ? current.points : 0
                 });
             });
-	    localStorage.setItem("GVM", JSON.stringify(self));
+	    save_state();
         };
         var timeout = null;
         var process_questions = function () {
@@ -236,6 +261,7 @@ var join_game_owner = function (socket, room_code) {
                     send_answer();
                 }
             }
+	    save_state();
         });
         socket.on('free_user', function(data, cb) {
             var player = self.players().filter(function (val) { return data.guid == val.guid})[0];
@@ -249,6 +275,7 @@ var join_game_owner = function (socket, room_code) {
                 });
             });
 	    player.guid = "";
+            save_state();
         });
 	socket.on('push_answer', function (data, cb) {
             $('#' + data.guid).html(data.answer);
@@ -264,21 +291,24 @@ var join_game_owner = function (socket, room_code) {
             });
         });
     
-     
-        $('#start_game').on('click', function () {
+        var start_game = function () {
             if (self.questions().length != 0) {
                 $('.pre_game').css('display', 'none');
                 $('.in_game').css('display', 'inline-block');
                 $('#controls').css('display', 'block');
-                self.current_question(0);
                 show_screen('gm_screen');
                 socket.emit('unlock', {});
                 send_question();
             } else {
                 alert("Can't start the game without questions, silly.");
             }
-	    localStorage.setItem("GVM", JSON.stringify(self));
-        });
+	    save_state();
+        };
+        $('#start_game').on('click', function() { 
+	  self.current_question(0);
+	  start_game(); 
+	});
+
         $('#show_answer').on('click', function () {
             $('#show_answer').prop('disabled', true);
             $('#lock_all_answers').prop('disabled', true);
@@ -302,6 +332,7 @@ var join_game_owner = function (socket, room_code) {
                         return val.player == node.attr('guid');
                     })[0].points = number;
                     node.html(number);
+		    save_state();
                 });
             }
         });
@@ -329,6 +360,7 @@ var join_game_owner = function (socket, room_code) {
                 });
                 socket.emit('unlock', {});
             }
+	    save_state();
         });
         $('#next_question').on('click', function () {
             if (self.current_question() < self.questions().length - 1) {
@@ -354,6 +386,7 @@ var join_game_owner = function (socket, room_code) {
                 });
                 socket.emit('unlock', {});
             }
+	    save_state();
         });
         $("#view_scores").on("click", function(){
             calculate_leaderboard();
@@ -392,12 +425,7 @@ var join_game_owner = function (socket, room_code) {
             timeout = setTimeout(process_questions, 1000);
         });
     };
-    var GVM = localStorage.getItem("GVM");
-    if(GVM) {
-      ko.applyBindings(JSON.parse(GVM));
-    } else {
-      ko.applyBindings(new GameViewModel());
-    }
+    ko.applyBindings(new GameViewModel());
 };
 // Game Controls
 $(document).ready(function () {
@@ -431,9 +459,11 @@ $(document).ready(function () {
     $('#new_btn').on('click', function () {
         var room_code = gen_room_code();
         join_game_owner(socket, room_code);
+	localStorage.clear();
     });
     $('#join_btn').on('click', function () {
         show_screen('player_connect_screen');
+	localStorage.clear();
     });
     $('#join_game').on('click', function () {
         join_game_player(socket, $('#player_username').val(), $('#join_room_code').val().toUpperCase(), 'new');
