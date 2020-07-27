@@ -124,6 +124,7 @@ var join_game_owner = function (socket, room_code) {
                     points: got_it ? current.points : 0
                 });
             });
+	    localStorage.setItem("GVM", JSON.stringify(self));
         };
         var timeout = null;
         var process_questions = function () {
@@ -276,6 +277,7 @@ var join_game_owner = function (socket, room_code) {
             } else {
                 alert("Can't start the game without questions, silly.");
             }
+	    localStorage.setItem("GVM", JSON.stringify(self));
         });
         $('#show_answer').on('click', function () {
             $('#show_answer').prop('disabled', true);
@@ -389,8 +391,13 @@ var join_game_owner = function (socket, room_code) {
             clearTimeout(timeout);
             timeout = setTimeout(process_questions, 1000);
         });
+    };
+    var GVM = localStorage.getItem("GVM");
+    if(GVM) {
+      ko.applyBindings(JSON.parse(GVM));
+    } else {
+      ko.applyBindings(new GameViewModel());
     }
-    ko.applyBindings(new GameViewModel());
 };
 // Game Controls
 $(document).ready(function () {
