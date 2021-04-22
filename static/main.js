@@ -429,7 +429,7 @@ var join_game_owner = function (socket, room_code) {
 };
 // Game Controls
 $(document).ready(function () {
-    var socket = io.connect('http://trivia.saintfactorstudios.ml/socket_space');
+    var socket = io.connect('http://trivia.saintfactorstudios.com/socket_space');
     socket.on('message', function (data, cb) {
         console.log(data);
     });
