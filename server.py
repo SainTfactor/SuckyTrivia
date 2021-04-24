@@ -23,7 +23,7 @@ def before_request():
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return app.send_static_file('html/index.html')
 
 @app.route('/pull_url')
 def pull_url():
