@@ -53,6 +53,7 @@
           inline-template 
           v-if="current_board == 'gm-screen'" 
           v-on:change_board="change_board"
+          v-on:start_game="start_game"
           :question_tree="question_tree"
           :game_started="game_started"
           :roomcode="roomcode">
@@ -260,17 +261,25 @@
       change_board: function(board) {
         this.current_board = board
       },
-      start_game: function() {
-        this.change_board("gm-screen")
-        this.game_started = true;
+      start_game: function() {        
+        if (this.question_tree.questions.length != 0) {
+          this.change_board("gm-screen")
+          this.question_tree.current_question = 0
+          this.game_started = true;
+          socket.emit('unlock', {});
+          send_question(this.question_tree);
+        } else {
+          alert("Can't start the game without questions, silly.");
+        }
+        save_state(this.question_tree);
       },
       finish_game: function() {
         this.game_started=false;
         this.change_board("gm-screen")
         socket.emit('send_question', "");
-        self.question_tree.current_question(-1);
+        this.question_tree.current_question = -1;
         socket.emit('unlock', {});
-        self.question_tree = {
+        this.question_tree = {
           questions: [],
           players: [],
           current_question: -1,
